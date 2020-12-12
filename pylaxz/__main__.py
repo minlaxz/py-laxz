@@ -1,12 +1,16 @@
 import sys
+from .utils.logxs import *
 
-info="""
-you should use this as module.
-"""
-
-def main():
-    print('Nice. from py-laxz') if len(sys.argv) == 1 else print('Noice from py-laxz')
-    print(info)
+def main(**kwargs) -> None:
+    for k, v in kwargs.items():
+        printf('{} = {}'.format(k,v), internal=True)
 
 if __name__ == "__main__":
-    main()
+    try:
+        main ( ** dict(arg.split('=') for arg in sys.argv[1:]))
+
+    except ValueError:
+        printf('Internal Error', internal=True)
+    
+    except Exception as e:
+        printf(e, internal=True)
