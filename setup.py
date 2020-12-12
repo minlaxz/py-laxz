@@ -23,7 +23,8 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url=meta['__github_project__'],
-    packages=setuptools.find_packages(where='pylaxz'),
+    packages=setuptools.find_packages(),
+    package_dir={'pylaxz':'pylaxz'},
     classifiers=[
         "Programming Language :: Python :: 3",
         'Programming Language :: Python :: 3 :: Only',
@@ -31,7 +32,6 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     keywords='sample, setuptools, development, pylaxz',
-    package_dir={'': 'pylaxz'},
     python_requires='>=3.5, <4',
     install_requires=requires,
     license=meta['__license__'],
