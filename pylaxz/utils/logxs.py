@@ -8,7 +8,7 @@ License: MIT, see LICENSE for more details.
 
 from rich import print as _p
 
-def printf(*argv, internal=False):
+def printf(*argv, _int=False):
     data, data_type, data_shape = [], [], []
     for arg in argv:
         try:
@@ -18,16 +18,28 @@ def printf(*argv, internal=False):
         except AttributeError:
             data_shape.append(None)
         except Exception as e:
-            _print(e)
+            _p(e)
 
     for i in range(len(data)):
-        _print(data[i])
-        if not internal:
-            if (data_shape[i] == () or data_shape[i] == None):
-                _p('{0}'.format(data_type[i]))
-            else:
-                _p('{0} => shape: {1}'.format(data_type[i], data_shape[i]))
+        if _int:
+            _print_internal(data[i])
+        else:
+            _print_data(data[i])
+            _print_ext(data_type[i], None) if (data_shape[i] == () or 
+            data_shape[i] == None) else _print_ext(data_type[i], data_shape[i])  
 
-def _print(m):
+def _print_ext(dtype, dshape):
+    _print_type(dtype)
+    if dshape: _print_shape(dshape)
+
+def _print_internal(m):
+    _p('[magenta] >> {0}[/magenta]'.format(m))
+
+def _print_data(m):
     _p('[italic red]{0}[/italic red]'.format(m))
 
+def _print_type(m):
+    _p('[blue]{0}[/blue]'.format(m))
+
+def _print_shape(m):
+    _p('shape => [reverse red]{0}[/red reverse]'.format(m))

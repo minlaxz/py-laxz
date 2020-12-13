@@ -24,7 +24,7 @@ def ip():
     _subprocess.call(['ifconfig', '-a']) if _linux else _subprocess.call(['ipconfig'])
 
 def os_info():       
-    printf(_os.uname(), internal=True) if _linux else printf('r u on windows ? omg!', internal=True)
+    printf(_os.uname(), _int=True) if _linux else printf('r u on windows ? omg!', _int=True)
 
 def hw_info():
     pass
@@ -33,10 +33,10 @@ def speed():
     try:
         if internet:
             _speedr = _st.Speedtest()
-            printf('Please wait ... ', internal=True)
+            printf('Please wait ... ', _int=True)
             _speedr.get_best_server()
-            printf('Ping : {} ms'.format(_speedr.results.ping), internal=True)
-            printf('Download, {:.2f} MB/s'.format(_speedr.download()/1000000) , internal=True)
-            printf('Upload, {:.2f} MB/s'.format(_speedr.upload()/1000000) , internal=True)
+            printf('Ping : {} ms'.format(_speedr.results.ping), _int=True)
+            printf('Download, {:.2f} MB/s'.format(_speedr.download()/1000000) , _int=True)
+            printf('Upload, {:.2f} MB/s'.format(_speedr.upload()/1000000) , _int=True)
     except _st.ConfigRetrievalError:
-        printf('no internet to be checked!', internal=True)
+        printf('no internet to be checked!', _int=True)
