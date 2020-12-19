@@ -4,7 +4,8 @@ here = os.path.abspath(os.path.dirname(__file__))
 
 requires = [
     'rich', 
-    'speedtest-cli'
+    'speedtest-cli', 
+    'pdf2image'
 ]
 
 meta = {}

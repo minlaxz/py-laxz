@@ -1,5 +1,7 @@
-from subprocess import run as _run
-from subprocess import PIPE as _PIPE
+from subprocess import (
+    run as _run, 
+    PIPE as _PIPE
+)
 from sys import argv as _argv
 from .utils.logxs import *
 
