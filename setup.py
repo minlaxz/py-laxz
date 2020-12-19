@@ -1,7 +1,7 @@
-import os
+from os import path
 from setuptools import setup, find_packages
 
-# here = os.path.abspath(os.path.dirname(__file__))
+here = path.abspath(path.dirname(__file__))
 
 requires = [
     'rich', 
@@ -9,16 +9,16 @@ requires = [
     'pdf2image'
 ]
 
-# meta = {}
-# with open(os.path.join(here, 'pylaxz', '__meta__.py'), 'r') as f:
-#     exec(f.read(), meta)
+info = {}
+with open(path.join(here, 'pylaxz', '__version__.py'), 'r') as f:
+    exec(f.read(), info)
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
     name="py-laxz",
-    version="0.1.5",
+    version=info['version'],
     description="A small until for my needs.",
     long_description=long_description,
     long_description_content_type="text/markdown",

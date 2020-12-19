@@ -8,7 +8,7 @@ License: MIT, see LICENSE for more details.
 
 from rich import print as _p
 
-def printf(*argv, _int=False):
+def printf(*argv, _int=False, _err=False):
     data, data_type, data_shape = [], [], []
     for arg in argv:
         try:
@@ -22,7 +22,7 @@ def printf(*argv, _int=False):
 
     for i in range(len(data)):
         if _int:
-            _print_internal(data[i])
+            _print_error(data[i]) if _err else _print_internal(data[i])
         else:
             _print_data(data[i])
             _print_ext(data_type[i], None) if (data_shape[i] == () or 
@@ -33,7 +33,10 @@ def _print_ext(dtype, dshape):
     if dshape: _print_shape(dshape)
 
 def _print_internal(m):
-    _p('[magenta] >> {0}[/magenta]'.format(m))
+    _p('[magenta] info >> {0}[/magenta]'.format(m))
+
+def _print_error(m):
+    _p('[red] error >> {0}[/red]'.format(m))
 
 def _print_data(m):
     _p('[italic red]{0}[/italic red]'.format(m))
@@ -42,4 +45,4 @@ def _print_type(m):
     _p('[blue]{0}[/blue]'.format(m))
 
 def _print_shape(m):
-    _p('shape => [reverse red]{0}[/red reverse]'.format(m))
+    _p('shape => [red]{0}[/red]'.format(m))
