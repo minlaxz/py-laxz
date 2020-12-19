@@ -1,5 +1,5 @@
-import setuptools, os
-
+import os
+from setuptools import setup, find_packages
 here = os.path.abspath(os.path.dirname(__file__))
 
 requires = [
@@ -8,37 +8,39 @@ requires = [
     'pdf2image'
 ]
 
-meta = {}
-with open(os.path.join(here, 'pylaxz', '__meta__.py'), 'r') as f:
-    exec(f.read(), meta)
+# meta = {}
+# with open(os.path.join(here, 'pylaxz', '__meta__.py'), 'r') as f:
+#     exec(f.read(), meta)
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
-setuptools.setup(
-    name=meta['__name__'], # Replace with your own username
-    version=meta['__version__'],
-    author=meta['__author__'],
-    author_email=meta['__author_email__'],
-    description=meta['__description__'],
+setup(
+    name="py-laxz",
+    version="0.1.3",
+    description="A small until for my needs.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url=meta['__github_project__'],
-    packages=setuptools.find_packages(),
-    package_dir={'pylaxz':'pylaxz'},
+    url="https://github.com/minlaxz/logxs",
+    author="Min Latt",
+    author_email="minminlaxz@gmail.com",
+    license="MIT",
     classifiers=[
         "Programming Language :: Python :: 3",
         'Programming Language :: Python :: 3 :: Only',
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    packages=find_packages(),
+    include_package_data=True,    
+    # package_dir={'pylaxz':'pylaxz'},
     keywords='sample, setuptools, development, pylaxz',
     python_requires='>=3.5, <4',
     install_requires=requires,
-    license=meta['__license__'],
     project_urls={  # Optional
         'Bug Reports': 'https://github.com/minlaxz/pylaxz/issues',
         'Say Thanks!': 'http://saythanks.io/to/minlaxz',
         'Source': meta['__github_project__'],
     },
+    entry_points={"console_scripts": ["pylaxz=pylaxz.__main__:main"]},
 )
