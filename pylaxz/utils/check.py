@@ -1,17 +1,23 @@
-import subprocess as _subprocess
-import os as _os
+"""
+pylaxz -c --check
+
+checking everying.
+"""
+# Standard library imports
+from subprocess import call
+import os
+
+# pylaxz imports
 from .logxs import *
 import speedtest as _st
-import sys as _sys
 
-try:
-    import httplib2 as _httplib
-except ImportError:
-    import http.client as _httplib
-
-if _os.name == 'posix': _linux = True
+_linux = True if os.name == 'posix' else False
 
 def internet(url="www.google.com", timeout=3):
+    try:
+        import httplib2 as _httplib
+    except ImportError:
+        import http.client as _httplib
     conn = _httplib.HTTPConnection(url, timeout=timeout)
     try:
         conn.request("HEAD", "/")
@@ -21,10 +27,10 @@ def internet(url="www.google.com", timeout=3):
         return False
 
 def ip():
-    _subprocess.call(['ifconfig', '-a']) if _linux else _subprocess.call(['ipconfig'])
+    call(['ifconfig', '-a']) if _linux else call(['ipconfig'])
 
 def os_info():       
-    printf(_os.uname(), _int=True) if _linux else printf('r u on windows ? omg!', _int=True)
+    printf(os.uname(), _int=True) if _linux else printf('r u on windows ? omg!', _int=True)
 
 def hw_info():
     pass
@@ -40,3 +46,13 @@ def speed():
             printf('Upload, {:.2f} MB/s'.format(_speedr.upload()/1000000) , _int=True)
     except _st.ConfigRetrievalError:
         printf('no internet to be checked!', _int=True)
+
+class Os:
+    def __init__(self) -> None:
+        pass
+
+    def software(self):
+        print('checking software information.')
+    
+    def hardware(self):
+        print('checking hardware information.')

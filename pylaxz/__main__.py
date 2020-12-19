@@ -21,9 +21,10 @@ More information is available at:
 from subprocess import ( run , PIPE)
 from sys import argv
 
-#pylaxz imports
+# pylaxz imports
 from .utils import logxs
 from .__version__ import version
+from .utils import check
 
 def main(direct=True):
     """Main function of pylaxz""" # pylaxz script call
@@ -46,6 +47,20 @@ def main(direct=True):
         if "-u" in opts or "--update" in opts:
             updater()
             return
+        
+        if "-c" in opts or "--check" in opts:
+            if args:
+                if "internet" in args: check.internet()
+                if "speed" in args: check.speed()
+                if "ip" in args: check.ip()
+                if "os_info" in args: check.os_info()
+                if "hw_info" in args: check.hw_info()
+                if "os" in args: 
+                    os = check.Os()
+                    if argv[-1] == "s" : os.software()
+                    if argv[-1] == "h" : os.hardware()
+            else:
+                logxs.printf('Need argument to check.', _int=True, _err=True)
     else:
         logxs.printf("'pylaxz -h' for more info", _int=True, _err=True)
     
