@@ -18,7 +18,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="py-laxz",
-    version="0.1.3",
+    version="0.1.5",
     description="A small until for my needs.",
     long_description=long_description,
     long_description_content_type="text/markdown",
