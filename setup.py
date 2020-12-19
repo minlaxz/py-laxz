@@ -1,6 +1,7 @@
 import os
 from setuptools import setup, find_packages
-here = os.path.abspath(os.path.dirname(__file__))
+
+# here = os.path.abspath(os.path.dirname(__file__))
 
 requires = [
     'rich', 
@@ -21,7 +22,7 @@ setup(
     description="A small until for my needs.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/minlaxz/logxs",
+    url="https://github.com/minlaxz/py-laxz",
     author="Min Latt",
     author_email="minminlaxz@gmail.com",
     license="MIT",
@@ -39,8 +40,8 @@ setup(
     install_requires=requires,
     project_urls={  # Optional
         'Bug Reports': 'https://github.com/minlaxz/pylaxz/issues',
-        'Say Thanks!': 'http://saythanks.io/to/minlaxz',
-        'Source': meta['__github_project__'],
+        'Say Thanks!': 'http://saythanks.io/to/minminlaxz%40gmail.com',
+        'Source': "https://github.com/minlaxz/py-laxz",
     },
     entry_points={"console_scripts": ["pylaxz=pylaxz.__main__:main"]},
 )
