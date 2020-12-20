@@ -1,48 +1,58 @@
 """
-logxs: noice print.
+logxs: noice print using rich.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Copyright (c) 2020 Min Latt.
+by Min Latt.
 License: MIT, see LICENSE for more details.
 """
 
 from rich import print as _p
+import keyword
 
-def printf(*argv, _int=False, _err=False):
-    data, data_type, data_shape = [], [], []
-    for arg in argv:
-        try:
-            data.append(arg)
-            data_type.append(type(arg))
-            data_shape.append(arg.shape)
-        except AttributeError:
-            data_shape.append(None)
-        except Exception as e:
-            _p(e)
+def printf(*argv, _int=False, _err=False) -> None:
+    """
 
-    for i in range(len(data)):
-        if _int:
-            _print_error(data[i]) if _err else _print_internal(data[i])
-        else:
-            _print_data(data[i])
-            _print_ext(data_type[i], None) if (data_shape[i] == () or 
-            data_shape[i] == None) else _print_ext(data_type[i], data_shape[i])  
+    Parameters:
+        in << takes any given arguments
+        out >> return data back, type, also shape for ML purpose.
 
-def _print_ext(dtype, dshape):
-    _print_type(dtype)
-    if dshape: _print_shape(dshape)
+    Usage:
+    ------
+    logxs.printf(ANY)
 
-def _print_internal(m):
-    _p('[magenta] info >> {0}[/magenta]'.format(m))
+    """
+    if _int: # for internal prints and error messages
+        for _ in argv:
+            _print_error(_) if _err else _print_internal(_)
+    else :   # called for other purpose by user.
+        data, data_type, data_shape = [], [], []
+        for _ in argv:
+            try:
+                data.append(_)
+                data_type.append(type(_))
+                data_shape.append(_.shape)
+            except AttributeError:
+                data_shape.append(None)
+            except Exception as e:
+                _print_error(e)
 
-def _print_error(m):
+        for _ in range(len(data)):
+            _print_data(data[_])
+            _print_type(data_type[_])
+            if not (data_shape[_] == () or data_shape[_] == None):
+                _print_shape(data_shape[_]) 
+
+def _print_internal(m) -> None:
+    _p('[magenta]>> \n{0}[/magenta]'.format(m))
+
+def _print_error(m) -> None:
     _p('[red] error >> {0}[/red]'.format(m))
 
-def _print_data(m):
+def _print_data(m) -> None:
     _p('[italic red]{0}[/italic red]'.format(m))
 
-def _print_type(m):
+def _print_type(m) -> None:
     _p('[blue]{0}[/blue]'.format(m))
 
-def _print_shape(m):
+def _print_shape(m) -> None:
     _p('shape => [red]{0}[/red]'.format(m))
