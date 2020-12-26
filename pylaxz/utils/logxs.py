@@ -7,7 +7,7 @@ License: MIT, see LICENSE for more details.
 """
 
 from rich import print as _p
-import keyword
+# import keyword
 
 def printf(*argv, _int=False, _err=False) -> None:
     """
@@ -46,7 +46,7 @@ def _print_internal(m) -> None:
     _p('[magenta]>> \n{0}[/magenta]'.format(m))
 
 def _print_error(m) -> None:
-    _p('[red] error >> {0}[/red]'.format(m))
+    _p('[red]>> {0}[/red]'.format(m))
 
 def _print_data(m) -> None:
     _p('[italic red]{0}[/italic red]'.format(m))
