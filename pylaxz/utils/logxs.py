@@ -7,7 +7,9 @@ License: MIT, see LICENSE for more details.
 """
 
 from rich import print as _p
+
 # import keyword
+
 
 def printf(*argv, _int=False, _err=False) -> None:
     """
@@ -21,10 +23,10 @@ def printf(*argv, _int=False, _err=False) -> None:
     logxs.printf(ANY)
 
     """
-    if _int: # for internal prints and error messages
+    if _int:  # for internal prints and error messages
         for _ in argv:
             _print_error(_) if _err else _print_internal(_)
-    else :   # called for other purpose by user.
+    else:  # called for other purpose by user.
         data, data_type, data_shape = [], [], []
         for _ in argv:
             try:
@@ -40,19 +42,24 @@ def printf(*argv, _int=False, _err=False) -> None:
             _print_data(data[_])
             _print_type(data_type[_])
             if not (data_shape[_] == () or data_shape[_] == None):
-                _print_shape(data_shape[_]) 
+                _print_shape(data_shape[_])
+
 
 def _print_internal(m) -> None:
-    _p('[magenta]>> \n{0}[/magenta]'.format(m))
+    _p("[magenta]>> \n{0}[/magenta]".format(m))
+
 
 def _print_error(m) -> None:
-    _p('[red]>> {0}[/red]'.format(m))
+    _p("[red]>> {0}[/red]".format(m))
+
 
 def _print_data(m) -> None:
-    _p('[italic red]{0}[/italic red]'.format(m))
+    _p("[italic red]{0}[/italic red]".format(m))
+
 
 def _print_type(m) -> None:
-    _p('[blue]{0}[/blue]'.format(m))
+    _p("[blue]{0}[/blue]".format(m))
+
 
 def _print_shape(m) -> None:
-    _p('shape => [red]{0}[/red]'.format(m))
+    _p("shape => [red]{0}[/red]".format(m))
