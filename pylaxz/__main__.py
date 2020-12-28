@@ -29,6 +29,7 @@ More information is available at:
 from subprocess import call, run, PIPE
 from sys import argv
 import getopt
+import os
 
 # pylaxz imports
 from .utils import logxs, _network, _system
@@ -39,7 +40,7 @@ def main(direct=True):
     """
 
     Main function of pylaxz
-    
+
     """
     if len(argv[1:]) == 0:
         logxs.printf("$ pylaxz -h for help", _int=True)
@@ -47,8 +48,8 @@ def main(direct=True):
     try:
         args, _ = getopt.getopt(
             argv[1:],
-            "hvuN:S:L:",
-            ["help", "version", "update", "network", "system", "lxz"],
+            "hvuiN:S:L:",
+            ["help", "version", "update", "info", "network", "system", "lxz"],
         )
         for c_flag, c_val in args:
 
@@ -80,11 +81,16 @@ def main(direct=True):
                     _logxs_out(s.info(all=True))
 
             elif c_flag in ("-L", "--lxz"):
-                _ = "bash ./pylaxz/shells/lxz.sh "
-                if c_val in ("--help", "--version", "--network"):
+
+                dir_path = os.path.dirname(os.path.realpath(__file__))
+                script_path = os.path.join(dir_path, "shells/")
+                _ = "bash " + script_path + "help.sh "
+                if c_val in (
+                        "--help", "--version", "--network"):
                     _call_shell(cmd=_ + c_val)
+
                 else:
-                    _logxs_out("main : not an option for lxz.")
+                    _logxs_out("main : not an option for lxz. -L")
 
     except getopt.error as err:
         # output error, and return with an error code
@@ -92,8 +98,9 @@ def main(direct=True):
 
 
 def _call_shell(cmd, return_=False):
-    result = run(cmd, shell=True, check=False, stdout=PIPE, universal_newlines=True)
-    return result if return_ else _logxs_out(result.stdout[:-1])
+    result = run(cmd, shell=True, check=False,
+                 stdout=PIPE, universal_newlines=True)
+    return result.stdiut[:-1] if return_ else _logxs_out(result.stdout[:-1])
 
 
 def _logxs_out(msg):

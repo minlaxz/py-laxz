@@ -1,8 +1,9 @@
+#! /bin/env bash
 flag=$1
 case "$flag" in
-"")
-    printf "       --help      print lxz help message and exit.\n"
-    printf "       --version   print lxz version.\n\n"
+"" | --[hH]* )
+    printf "       --help      print this help message and exit.\n"
+    printf "       --version   print lxz helper version.\n\n"
 
     printf "       --copy      copy files and directories with progess.\n"
     printf "       --remove    safe remove files and directories.\n\n"
@@ -16,6 +17,7 @@ case "$flag" in
 
     printf "       --package   package update and upgrade.\n\n"
     ;;
+    
 --network)
     cat <<EOF
 
