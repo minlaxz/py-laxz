@@ -34,7 +34,7 @@ import os
 # pylaxz imports
 from .utils import logxs, _network, _system
 from .__version__ import version
-
+from . import orm
 
 def main(direct=True):
     """
