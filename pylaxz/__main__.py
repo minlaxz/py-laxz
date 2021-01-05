@@ -42,6 +42,8 @@ def main(direct=True):
     Main function of pylaxz
 
     """
+    args_for_L = ["--test", "--help", "--version"]
+
     if len(argv[1:]) == 0:
         logxs.printf("$ pylaxz -h for help", _int=True)
 
@@ -84,13 +86,12 @@ def main(direct=True):
 
                 dir_path = os.path.dirname(os.path.realpath(__file__))
                 script_path = os.path.join(dir_path, "shells/")
-                _ = "bash " + script_path + "help.sh "
-                if c_val in (
-                        "--help", "--version", "--network"):
+                _ = "bash " + script_path + "script.sh "
+                if c_val in ( args_for_L ):
                     _call_shell(cmd=_ + c_val)
 
                 else:
-                    _logxs_out("main : not an option for lxz. -L")
+                    _logxs_out("Not an option ({}) for lxz. -L".format(c_val))
 
     except getopt.error as err:
         # output error, and return with an error code
