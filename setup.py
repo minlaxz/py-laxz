@@ -6,7 +6,7 @@ here = path.abspath(path.dirname(__file__))
 requires = [
     'rich', 
     'speedtest-cli', 
-    
+    'pendulum',
 ]
 
 info = {}

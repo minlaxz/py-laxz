@@ -1,1 +1,2 @@
 include pylaxz/shells/*.sh
+include pylaxz/data/*

@@ -28,13 +28,26 @@ More information is available at:
 # Standard library imports
 from subprocess import call, run, PIPE
 from sys import argv
-import getopt
+import getopt, pendulum
 import os
 
 # pylaxz imports
 from .utils import logxs, _network, _system
 from .__version__ import version
-from . import orm
+from .orm import Database
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+db = Database(dir_path+'/data/sqlite.db')
+
+class DBModel(db.Model):
+    text = str
+    time = str
+    direct = bool
+    def __init__(self, text, time, direct) -> None:
+        self.text = text
+        self.time = time
+        self.direct = direct
+
 
 def main(direct=True):
     """
@@ -43,6 +56,7 @@ def main(direct=True):
 
     """
     args_for_L = ["--test", "--help", "--version"]
+    _save([argv[:], direct])
 
     if len(argv[1:]) == 0:
         logxs.printf("$ pylaxz -h for help", _int=True)
@@ -97,6 +111,9 @@ def main(direct=True):
         # output error, and return with an error code
         logxs.printf(str(err), _int=True, _err=True)
 
+def _save(cmd):
+    _ = DBModel('pylaxz {} '.format(cmd[0]), str(pendulum.now()), cmd[1]).save()
+    db.commit()
 
 def _call_shell(cmd, return_=False):
     result = run(cmd, shell=True, check=False,
