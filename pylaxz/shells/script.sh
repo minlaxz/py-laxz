@@ -16,6 +16,12 @@ case "$flag" in
     # printf "    --decrypt           decrypt lxz encrpyted {enc_file} aes256\n"
     # printf "    --gen-pw            generate a password\n\n"
 
+    printf "    --how-enc           Show help how to encrypt.\n"
+    printf "    --how-dec           Show help how to decrypt.\n"
+    printf "    --how-compress      Show help how to parallel compress.\n"
+    printf "    --how-decompress    Show help how to parallel decompress.\n\n"
+
+
     printf "    --sys-upgrade       package update and upgrade\n"
     printf "    --sys-setup         setting up linux system with essential dependencies\n\n"
 
@@ -34,6 +40,27 @@ EOF
     cat <<EOF
 shell script version : $version
 EOF
+;;
+
+--how-enc)
+echo "openssl aes-256-cbc -salt -pbkdf2 -in ORIG_FILE -out ENCTYPTED"
+echo "openssl rand 256 >symme.key"
+echo "openssl enc -aes-256-cbc -salt -pbkdf2 -in ORIG_FILE -out ENCRYPTED -k KEYFILE"
+;;
+
+--how-dec)
+echo "openssl aes-256-cbc -d -salt -pbkdf2 -in ENCRYPTED -out ORIG_FILE"
+echo "openssl enc -aes-256-cbc -d -salt -pbkdf2 -in ENCRYPTED -out ORIG_FILE -k KEYFILE"
+;;
+
+--how-compress)
+echo "Need pixz"
+echo "tar cvf - ./FILE | pixz -p 4 > COMPRESS.tpxz"
+;;
+
+--how-decompress)
+echo "Need pixz"
+echo "pixz -x -p 4 < COMPRESS.tpxz | tar xv -C path/to/dir"
 ;;
 
 --sys-upgrade)

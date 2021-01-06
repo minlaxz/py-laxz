@@ -45,7 +45,8 @@ DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 SCRIPT_PATH = os.path.join(DIR_PATH, "shells/")
 ARG_L = ["--test", "--help", "--version",
          "--sys-upgrade", "--sys-setup",
-         "--scan-host","--port-service","--has-internet"]
+         "--scan-host","--port-service","--has-internet",
+         "--how-enc","--how-dec","--how-compress","--how-decompress"]
 
 # if save_history:
 #     from .orm import Database
