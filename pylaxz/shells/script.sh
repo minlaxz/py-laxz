@@ -25,9 +25,9 @@ case "$flag" in
     printf "    --sys-upgrade       package update and upgrade\n"
     printf "    --sys-setup         setting up linux system with essential dependencies\n\n"
 
-    printf "    --has-internet            check internet status from bash.\n"
-    printf "    --port-service                get service on specific port.\n"
-    printf "    --scan-host               scan port on given host. {need nmap}\n\n"
+    printf "    --has-internet      check internet status from bash.\n"
+    printf "    --port-service      get service on specific port.\n"
+    printf "    --scan-host         scan port on given host. {need nmap}\n\n"
     ;;
     
 --test)
@@ -43,14 +43,22 @@ EOF
 ;;
 
 --how-enc)
-echo "openssl aes-256-cbc -salt -pbkdf2 -in ORIG_FILE -out ENCTYPTED"
+echo "openssl enc -aes-256-cbc -salt -pbkdf2 -in ORIG_FILE -out ENCTYPTED"
+echo "echo 'TEXT' | openssl enc -e -aes-256-cbc -a -salt -pbkdf2"
+echo ""
 echo "openssl rand 256 >symme.key"
 echo "openssl enc -aes-256-cbc -salt -pbkdf2 -in ORIG_FILE -out ENCRYPTED -k KEYFILE"
+echo "echo 'TEXT' | openssl enc -e -aes-256-cbc -a -salt -pbkdf2 -k KEYFILE"
+echo "FOR RSA https://gist.github.com/minlaxz/71a997c38665aa2fe530a6b4ba4308ed#rsa-encryptions"
 ;;
 
 --how-dec)
-echo "openssl aes-256-cbc -d -salt -pbkdf2 -in ENCRYPTED -out ORIG_FILE"
+echo "openssl enc -aes-256-cbc -d -salt -pbkdf2 -in ENCRYPTED -out ORIG_FILE"
+echo "echo 'CIPHER-TEXT' | openssl enc -e -aes-256-cbc -a -d -salt -pbkdf2"
+echo ""
 echo "openssl enc -aes-256-cbc -d -salt -pbkdf2 -in ENCRYPTED -out ORIG_FILE -k KEYFILE"
+echo "echo 'CIPHER-TEXT' | openssl enc -e -aes-256-cbc -a -salt -pbkdf2 -d -k KEYFILE"
+echo "FOR RSA https://gist.github.com/minlaxz/71a997c38665aa2fe530a6b4ba4308ed#rsa-encryptions"
 ;;
 
 --how-compress)
