@@ -17,6 +17,7 @@ Available flag are:
         Arguments : (os), (os-info), 
 
     -L, --lxz      Ingegrate with lxz TODO
+        --help for HELP.
         
 
 
@@ -26,27 +27,42 @@ More information is available at:
 
 """
 # Standard library imports
-from subprocess import call, run, PIPE
-from sys import argv
-import getopt, pendulum
+from http.client import NOT_EXTENDED
+from subprocess import run, PIPE, Popen, STDOUT
+from sys import argv, stdout, stderr
+import getopt
+import datetime
 import os
 
 # pylaxz imports
 from .utils import logxs, _network, _system
 from .__version__ import version
-from .orm import Database
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-db = Database(dir_path+'/data/sqlite.db')
 
-class DBModel(db.Model):
-    text = str
-    time = str
-    direct = bool
-    def __init__(self, text, time, direct) -> None:
-        self.text = text
-        self.time = time
-        self.direct = direct
+# save_history = False
+
+DIR_PATH = os.path.dirname(os.path.realpath(__file__))
+SCRIPT_PATH = os.path.join(DIR_PATH, "shells/")
+ARG_L = ["--test", "--help", "--version",
+         "--sys-upgrade", "--sys-setup",
+         "--scan-host","--port-service","--has-internet"]
+
+# if save_history:
+#     from .orm import Database
+#     db = Database(DIR_PATH+'/data/sqlite.db')
+# else:
+#     db = None
+
+
+# class DBModel(db.Model if db else None):
+#     text = str
+#     time = str
+#     direct = bool
+
+#     def __init__(self, text, time, direct) -> None:
+#         self.text = text
+#         self.time = time
+#         self.direct = direct
 
 
 def main(direct=True):
@@ -55,8 +71,9 @@ def main(direct=True):
     Main function of pylaxz
 
     """
-    args_for_L = ["--test", "--help", "--version"]
-    _save([argv[:], direct])
+
+    # if save_history:
+    #     _save([argv[:], direct])
 
     if len(argv[1:]) == 0:
         logxs.printf("$ pylaxz -h for help", _int=True)
@@ -69,63 +86,64 @@ def main(direct=True):
         )
         for c_flag, c_val in args:
 
-            if c_flag in ("-h", "--help"):
-                _logxs_out(__doc__)
-            elif c_flag in ("-v", "--version"):
-                _logxs_out(version)
-            elif c_flag in ("-u", "--update"):
-                updater()
+            # stable args
+            if c_flag in ("-h", "--help"): _logxs_out(__doc__)
+            elif c_flag in ("-v", "--version"): _logxs_out(version)
+            elif c_flag in ("-u", "--update"): _updater()
 
             elif c_flag in ("-N", "--network"):
                 n = _network.Network()
-                if c_val in ("-h", "--help"):
-                    _logxs_out(n.__doc__)
-                elif c_val in ("ip", "ipaddress"):
-                    n.ip()
-                elif c_val in ("i", "internet"):
-                    n.internet()
-                elif c_val in ("s", "speed"):
-                    n.internet_speed()
+                if c_val in ("-h", "--help"): _logxs_out(n.__doc__)
+                elif c_val in ("ip", "ipaddress"): n.ip()
+                elif c_val in ("i", "internet"): n.internet()
+                elif c_val in ("s", "speed"): n.internet_speed()
 
             elif c_flag in ("-S", "--system"):
                 s = _system.System()
-                if c_val in ("-h", "--help"):
-                    _logxs_out(s.__doc__)
-                elif c_val in ("os"):
-                    _logxs_out(s.info())
-                elif c_val in ("os-info"):
-                    _logxs_out(s.info(all=True))
+                if c_val in ("-h", "--help"): _logxs_out(s.__doc__)
+                elif c_val in ("os"): _logxs_out(s.info())
+                elif c_val in ("os-info"): _logxs_out(s.info(all=True))
 
             elif c_flag in ("-L", "--lxz"):
+                _ = "bash " + SCRIPT_PATH + "script.sh "
 
-                dir_path = os.path.dirname(os.path.realpath(__file__))
-                script_path = os.path.join(dir_path, "shells/")
-                _ = "bash " + script_path + "script.sh "
-                if c_val in ( args_for_L ):
-                    _call_shell(cmd=_ + c_val)
-
-                else:
-                    _logxs_out("Not an option ({}) for lxz. -L".format(c_val))
+                if c_val in ARG_L: _call_shell(cmd= _ + c_val)
+                else: _logxs_out("Not an option ({}),  -L --help for more.".format(c_val))
 
     except getopt.error as err:
         # output error, and return with an error code
         logxs.printf(str(err), _int=True, _err=True)
 
-def _save(cmd):
-    _ = DBModel('pylaxz {} '.format(cmd[0]), str(pendulum.now()), cmd[1]).save()
-    db.commit()
 
-def _call_shell(cmd, return_=False):
-    result = run(cmd, shell=True, check=False,
-                 stdout=PIPE, universal_newlines=True)
-    return result.stdiut[:-1] if return_ else _logxs_out(result.stdout[:-1])
+# def _save(cmd):
+#     _ = DBModel(cmd[0], str(datetime.now()), cmd[1]).save()
+#     db.commit()
+
+
+def _call_shell(cmd):
+    # result = run(cmd, shell=True, check=False,
+    #              stdout=PIPE, universal_newlines=True)
+    # while True:
+    #     line = result.stdout.rstrip()
+    #     if not line: break
+    #     yield  line
+    # return result.stdout[:-1] if return_ else _logxs_out(result.stdout[:-1])
+
+    # p = Popen(cmd, stdout = PIPE, 
+    #     stderr = STDOUT, shell = True, bufsize=1 )
+    # for line in iter(p.stdout.readline, b''):
+    #     logxs.printf(line.decode("utf-8")[:-1] , _int=True, _shell=True)
+    # p.stdout.close()
+    # p.wait()
+    
+    run(cmd, shell=True, stderr=stderr, stdout=stdout)
 
 
 def _logxs_out(msg):
     logxs.printf(msg, _int=True)
 
 
-def updater():
+def _updater():
     _logxs_out("updating the script...")
     cmd = "find . -maxdepth 2 -name '*.py' -print0 | xargs -0 sha1sum | sort -h | sha256sum | awk '{print $1}'"
     _call_shell(cmd, return_=False)
