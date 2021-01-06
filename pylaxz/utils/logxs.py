@@ -11,7 +11,7 @@ from rich import print as _p
 # import keyword
 
 
-def printf(*argv, _int=False, _err=False) -> None:
+def printf(*argv, _int=False, _err=False, _shell=False) -> None:
     """
 
     Parameters:
@@ -25,7 +25,7 @@ def printf(*argv, _int=False, _err=False) -> None:
     """
     if _int:  # for internal prints and error messages
         for _ in argv:
-            _print_error(_) if _err else _print_internal(_)
+            _print_error(_) if _err else _print_internal(_, _shell)
     else:  # called for other purpose by user.
         data, data_type, data_shape = [], [], []
         for _ in argv:
@@ -45,8 +45,8 @@ def printf(*argv, _int=False, _err=False) -> None:
                 _print_shape(data_shape[_])
 
 
-def _print_internal(m) -> None:
-    _p("[magenta]>> \n{0}[/magenta]".format(m))
+def _print_internal(m, _shell) -> None:
+    _p("[magenta]>> {0}[/magenta]".format(m)) if _shell else _p("[magenta]>> \n{0}[/magenta]".format(m))
 
 
 def _print_error(m) -> None:
