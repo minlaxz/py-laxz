@@ -2,22 +2,19 @@
 version=1.0
 flag=$1
 case "$flag" in
-"" | --help )
-    printf "    --lxz-DE this will remind me to install what i need.\n"
-    printf "    --help      show this help message and exit\n"
-    printf "    --version   show lxz version\n\n"
+--help-long)
+    printf "    --lxz-DE        this will remind me to install what i need.\n"
+    printf "    --help-long     show this help message and exit\n"
+    printf "    --version       show lxz version\n\n"
 
-    # printf "    --copy              copy files and directories with progess\n"
-    # printf "    --remove            safe remove files and directories\n\n"
-
-    # printf "    --expose            exposing local service or fs to the internet\n"
+    # printf "    --expose            exposing local service or fs to the internet\n\n"
 
     printf "    --how-enc           Show help how to encrypt.\n"
     printf "    --how-dec           Show help how to decrypt.\n"
     printf "    --how-compress      Show help how to parallel compress.\n"
     printf "    --how-decompress    Show help how to parallel decompress.\n"
-    printf "    --how-copy          Copy with Progress Bar.\n\n"
-    printf "    --how-safe-rm       Safe remove."
+    printf "    --how-copy          Copy with Progress Bar.\n"
+    printf "    --how-safe-rm       Safe remove.\n\n"
 
     printf "    --sys-upgrade       package update and upgrade\n"
     printf "    --sys-setup         setting up linux system with essential dependencies\n\n"
@@ -26,11 +23,32 @@ case "$flag" in
     printf "    --port-service      get service on specific port.\n"
     printf "    --scan-host         scan port on given host. {need nmap}\n\n"
 
-    printf "    --issue-opencv      issues about opencv."
+    printf "    --issue-opencv      issues about opencv.\n\n"
 
     printf "    --is-installed      check a package or software is installed.\n\n"
-    ;;
-    
+;;
+
+--help)
+printf "    --lxz-DE\n"
+printf "    --help\n"
+printf "    --version\n\n"
+printf "    --how-enc\n"
+printf "    --how-dec\n"
+printf "    --how-compress\n"
+printf "    --how-decompress\n"
+printf "    --how-copy\n"
+printf "    --how-safe-rm\n\n"
+printf "    --sys-upgrade\n"
+printf "    --sys-setup\n\n"
+printf "    --has-internet\n"
+printf "    --port-service\n"
+printf "    --scan-host\n\n"
+printf "    --issue-opencv\n"
+printf "    --is-installed\n\n"
+
+printf "pylaxz -L --help-long TL;DR\n"
+;;
+
 --lxz-DE)
     cat <<EOF
 xsel imwheel gvfs-fuse exfat-fuse cifs-utils

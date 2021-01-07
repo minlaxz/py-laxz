@@ -41,13 +41,19 @@ from .__version__ import version
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 SCRIPT_PATH = os.path.join(DIR_PATH, "shells/")
-ARG_L = ["--lxz-DE ", "--help", "--version",
-         "--sys-upgrade", "--sys-setup",
-         "--scan-host","--port-service","--has-internet",
-         "--how-enc","--how-dec","--how-compress","--how-decompress",
-         "--is-installed","--how-copy", "--how-safe-rm"
+ARG_L = ["--lxz-DE ", "--help", "--version", "--help-long",
+         "--has-internet",
+         "--how-enc","--how-dec",
+         "--how-compress",
+         "--how-decompress",
+         "--how-copy", 
+         "--how-safe-rm"
          "--issue-opencv"]
-
+SUDO_ARG_L = ["--sys-upgrade",
+            "--sys-setup",
+            "--scan-host",
+            "--port-service", 
+            "--is-installed"]
 # if save_history:
 #     from .orm import Database
 #     db = Database(DIR_PATH+'/data/sqlite.db')
@@ -107,15 +113,19 @@ def main(direct=True):
 
             elif c_flag in ("-L", "--lxz"):
                 _ = "bash " + SCRIPT_PATH + "script.sh "
-
-                if c_val in ARG_L: _call_shell(cmd= _ + c_val)
+                if c_val in SUDO_ARG_L :  
+                    assert os.uname()[-1] == 'x86_64'
+                    _call_shell(cmd= _ + c_val)
+                if c_val in ARG_L: 
+                    _call_shell(cmd= _ + c_val)
                 else: _logxs_out("Not an option ({}),  -L --help for more.".format(c_val))
 
     except getopt.error as err:
         # output error, and return with an error code
         logxs.printf(str(err), _int=True, _err=True)
 
-
+    except AssertionError:
+        logxs.printf("a command is excepted to be run on 'x86_64'", _int=True, _err=True)
 # def _save(cmd):
 #     _ = DBModel(cmd[0], str(datetime.now()), cmd[1]).save()
 #     db.commit()
