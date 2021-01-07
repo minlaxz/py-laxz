@@ -29,21 +29,26 @@ case "$flag" in
 ;;
 
 --help)
+printf "FOR ALL ARCH:"
 printf "    --lxz-DE\n"
 printf "    --help\n"
 printf "    --version\n\n"
+
+printf "    --has-internet\n"
 printf "    --how-enc\n"
 printf "    --how-dec\n"
 printf "    --how-compress\n"
 printf "    --how-decompress\n"
 printf "    --how-copy\n"
-printf "    --how-safe-rm\n\n"
+printf "    --how-safe-rm\n"
+printf "    --issue-opencv\n\n"
+
+printf "FOR x86_64 ARCH\n"
 printf "    --sys-upgrade\n"
 printf "    --sys-setup\n\n"
-printf "    --has-internet\n"
+
 printf "    --port-service\n"
 printf "    --scan-host\n\n"
-printf "    --issue-opencv\n"
 printf "    --is-installed\n\n"
 
 printf "pylaxz -L --help-long TL;DR\n"

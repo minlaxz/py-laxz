@@ -41,7 +41,7 @@ from .__version__ import version
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 SCRIPT_PATH = os.path.join(DIR_PATH, "shells/")
-ARG_L = ["--lxz-DE ", "--help", "--version", "--help-long",
+ARG_L = ["--lxz-DE", "--help", "--version", "--help-long",
          "--has-internet",
          "--how-enc","--how-dec", "--how-compress", "--how-decompress",
          "--how-copy",  "--how-safe-rm", "--issue-opencv"]
