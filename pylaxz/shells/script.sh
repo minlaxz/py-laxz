@@ -3,24 +3,21 @@ version=1.0
 flag=$1
 case "$flag" in
 "" | --help )
-    printf "    --test      test\n"
-    printf "    --help      print this help message and exit\n"
-    printf "    --version   print lxz helper version\n\n"
+    printf "    --lxz-DE this will remind me to install what i need.\n"
+    printf "    --help      show this help message and exit\n"
+    printf "    --version   show lxz version\n\n"
 
     # printf "    --copy              copy files and directories with progess\n"
     # printf "    --remove            safe remove files and directories\n\n"
 
     # printf "    --expose            exposing local service or fs to the internet\n"
 
-    # printf "    --encrypt           encrypt given {file} with aes256\n"
-    # printf "    --decrypt           decrypt lxz encrpyted {enc_file} aes256\n"
-    # printf "    --gen-pw            generate a password\n\n"
-
     printf "    --how-enc           Show help how to encrypt.\n"
     printf "    --how-dec           Show help how to decrypt.\n"
     printf "    --how-compress      Show help how to parallel compress.\n"
-    printf "    --how-decompress    Show help how to parallel decompress.\n\n"
-
+    printf "    --how-decompress    Show help how to parallel decompress.\n"
+    printf "    --how-copy          Copy with Progress Bar.\n\n"
+    printf "    --how-safe-rm       Safe remove."
 
     printf "    --sys-upgrade       package update and upgrade\n"
     printf "    --sys-setup         setting up linux system with essential dependencies\n\n"
@@ -28,17 +25,55 @@ case "$flag" in
     printf "    --has-internet      check internet status from bash.\n"
     printf "    --port-service      get service on specific port.\n"
     printf "    --scan-host         scan port on given host. {need nmap}\n\n"
+
+    printf "    --issue-opencv      issues about opencv."
+
+    printf "    --is-installed      check a package or software is installed.\n\n"
     ;;
     
---test)
+--lxz-DE)
     cat <<EOF
-Testing OK!
+xsel imwheel gvfs-fuse exfat-fuse cifs-utils
+net-tools build-essential cmake unzip zip pixz pkg-config
+kazam git vlc vscode gcc g++ python3 python3-dev python3-pip
+vim nano curl wget tar 
 EOF
 ;;
 
 --version)
     cat <<EOF
 shell script version : $version
+EOF
+;;
+
+--issue-opencv)
+cat << EOF
+"installing required build dependencies."
+    sudo apt install cmake gcc g++ git ffmpeg
+"to support python3."
+    sudo apt install python3-dev python3-numpy
+"GTK support for GUI features, Camera support (v4l), Media Support (ffmpeg, gstreamer) etc."
+    sudo apt install libavcodec-dev libavformat-dev libswscale-dev
+    sudo apt install libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev
+"to support gtk3"
+    sudo apt install libgtk-3-dev
+"optional Dependencies"
+    sudo apt install libpng-dev libjpeg-dev libopenexr-dev libtiff-dev libwebp-dev
+"https://github.com/pjreddie/darknet/issues/1886#issuecomment-547668240 > "
+    sudo apt install libopencv-dev
+EOF
+;;
+
+--how-copy)
+cat << EOF
+rsync -ah --progress $1 $2
+EOF
+;;
+
+--how-safe-rm)
+cat << EOF
+sudo apt install trash-cli
+echo "alias rm='trash-put' >> bash-alias
 EOF
 ;;
 
@@ -84,7 +119,7 @@ sudo apt install vlc
 ;;
 
 --port-service)
-read -p "which port ? > default all LISTEN : " uservar
+read -p "which port [ALL] : " uservar
 if [ $uservar != "" ] ; then
     sudo lsof -i:$uservar
 else
@@ -93,7 +128,7 @@ fi
 ;;
 
 --scan-host)
-read -p "IPADDRESS : " uservar
+read -p "IPADDRESS : [localhost]" uservar
     sudo nmap -sTU -O $uservar
 ;;
 
@@ -103,6 +138,16 @@ read -p "IPADDRESS : " uservar
     if [ $? -eq 0 ] ; then echo "Internet connection is Good." ;
     else echo -e "No Internet Connection!" ;
     fi
+;;
+
+--is-installed)
+read -p "which package [ list ALL] " uservar
+if [ $uservar != "" ] ; then
+    apt list --installed | grep -i $uservar;
+else
+    sudo dpkg-query -Wf '${Installed-size}\t${Package}\n' | column -t
+fi
+
 ;;
 
 *)

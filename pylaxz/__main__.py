@@ -27,11 +27,9 @@ More information is available at:
 
 """
 # Standard library imports
-from http.client import NOT_EXTENDED
-from subprocess import run, PIPE, Popen, STDOUT
+from subprocess import run #, PIPE, Popen, STDOUT
 from sys import argv, stdout, stderr
 import getopt
-import datetime
 import os
 
 # pylaxz imports
@@ -43,10 +41,12 @@ from .__version__ import version
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 SCRIPT_PATH = os.path.join(DIR_PATH, "shells/")
-ARG_L = ["--test", "--help", "--version",
+ARG_L = ["--lxz-DE ", "--help", "--version",
          "--sys-upgrade", "--sys-setup",
          "--scan-host","--port-service","--has-internet",
-         "--how-enc","--how-dec","--how-compress","--how-decompress"]
+         "--how-enc","--how-dec","--how-compress","--how-decompress",
+         "--is-installed","--how-copy", "--how-safe-rm"
+         "--issue-opencv"]
 
 # if save_history:
 #     from .orm import Database
