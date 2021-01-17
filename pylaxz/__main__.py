@@ -27,7 +27,7 @@ More information is available at:
 
 """
 # Standard library imports
-from subprocess import run #, PIPE, Popen, STDOUT
+from subprocess import run  # , PIPE, Popen, STDOUT
 from sys import argv, stdout, stderr
 import getopt
 import os
@@ -41,15 +41,27 @@ from .__version__ import version
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 SCRIPT_PATH = os.path.join(DIR_PATH, "shells/")
-ARG_L = ["--lxz-DE", "--help", "--version", "--help-long",
-         "--has-internet",
-         "--how-enc","--how-dec", "--how-compress", "--how-decompress",
-         "--how-copy",  "--how-safe-rm", "--issue-opencv"]
-SUDO_ARG_L = ["--sys-upgrade",
-            "--sys-setup",
-            "--scan-host",
-            "--port-service", 
-            "--is-installed"]
+
+SYSX_PATH = "bash " + SCRIPT_PATH + "sysx.sh "
+HOWX_PATH = "bash " + SCRIPT_PATH + "howx.sh "
+
+SCRIPTX_PATH = "bash " + SCRIPT_PATH + "scriptx.sh "
+
+DKX_PATH = "bash " + SCRIPT_PATH + "dkx.sh "
+
+LXZ_CHECK = ["--has-internet"]
+
+LXZ_HOW = ["--how-enc", "--how-dec", "--how-compress", "--how-decompress",
+            "--how-copy",  "--how-safe-rm", "--issue-opencv", "--how-find-mv"]
+
+LXZ_SCRIPT = ["--lxz-DE", "--help", "--version", "--help-long"]
+
+
+_LXZ_S_NETWORK = ["--scan-host", "--port-service"]
+_LXZ_S_SYS = ["--sys-upgrade",
+              "--sys-setup", "--is-installed"]
+LXZ_SYS_ARG = _LXZ_S_NETWORK + _LXZ_S_SYS
+
 # if save_history:
 #     from .orm import Database
 #     db = Database(DIR_PATH+'/data/sqlite.db')
@@ -90,38 +102,58 @@ def main(direct=True):
         for c_flag, c_val in args:
 
             # stable args
-            if c_flag in ("-h", "--help"): _logxs_out(__doc__)
-            elif c_flag in ("-v", "--version"): _logxs_out(version)
-            elif c_flag in ("-u", "--update"): _updater()
+            if c_flag in ("-h", "--help"):
+                _logxs_out(__doc__)
+            elif c_flag in ("-v", "--version"):
+                _logxs_out(version)
+            elif c_flag in ("-u", "--update"):
+                _updater()
 
             elif c_flag in ("-N", "--network"):
                 n = _network.Network()
-                if c_val in ("-h", "--help"): _logxs_out(n.__doc__)
-                elif c_val in ("ip", "ipaddress"): n.ip()
-                elif c_val in ("i", "internet"): n.internet()
-                elif c_val in ("s", "speed"): n.internet_speed()
+                if c_val in ("-h", "--help"):
+                    _logxs_out(n.__doc__)
+                elif c_val in ("ip", "ipaddress"):
+                    n.ip()
+                elif c_val in ("i", "internet"):
+                    n.internet()
+                elif c_val in ("s", "speed"):
+                    n.internet_speed()
 
             elif c_flag in ("-S", "--system"):
                 s = _system.System()
-                if c_val in ("-h", "--help"): _logxs_out(s.__doc__)
-                elif c_val in ("os"): _logxs_out(s.info())
-                elif c_val in ("os-info"): _logxs_out(s.info(all=True))
+                if c_val in ("-h", "--help"):
+                    _logxs_out(s.__doc__)
+                elif c_val in ("os"):
+                    _logxs_out(s.info())
+                elif c_val in ("os-info"):
+                    _logxs_out(s.info(all=True))
 
-            elif c_flag in ("-L", "--lxz"):
-                _ = "bash " + SCRIPT_PATH + "script.sh "
-                if c_val in SUDO_ARG_L :  
+            elif c_flag in("-L", "--lxz"):
+                if c_val in LXZ_SYS_ARG: 
                     assert os.uname()[-1] == 'x86_64'
-                    _call_shell(cmd= _ + c_val)
-                if c_val in ARG_L: 
-                    _call_shell(cmd= _ + c_val)
-                else: _logxs_out("Not an option ({}),  -L --help for more.".format(c_val))
+                    _call_shell(cmd=SYSX_PATH + c_val)
+                
+                elif c_val in LXZ_HOW:
+                    _call_shell(cmd=HOWX_PATH + c_val)
+                
+                elif c_val in LXZ_SCRIPT + LXZ_CHECK:
+                    _call_shell(cmd=SCRIPTX_PATH + c_val)
+                
+                elif c_val == "--dk-help":
+                    _call_shell(cmd=DKX_PATH + c_val)
+
+                else:
+                    _logxs_out("Not an option ({}),  -L --help for help.".format(c_val))
+
 
     except getopt.error as err:
         # output error, and return with an error code
         logxs.printf(str(err), _int=True, _err=True)
 
     except AssertionError:
-        logxs.printf("a command is excepted to be run on 'x86_64'", _int=True, _err=True)
+        logxs.printf("that command is excepted to be run on 'x86_64, pc'",
+                     _int=True, _err=True)
 # def _save(cmd):
 #     _ = DBModel(cmd[0], str(datetime.now()), cmd[1]).save()
 #     db.commit()
@@ -136,13 +168,13 @@ def _call_shell(cmd):
     #     yield  line
     # return result.stdout[:-1] if return_ else _logxs_out(result.stdout[:-1])
 
-    # p = Popen(cmd, stdout = PIPE, 
+    # p = Popen(cmd, stdout = PIPE,
     #     stderr = STDOUT, shell = True, bufsize=1 )
     # for line in iter(p.stdout.readline, b''):
     #     logxs.printf(line.decode("utf-8")[:-1] , _int=True, _shell=True)
     # p.stdout.close()
     # p.wait()
-    
+
     run(cmd, shell=True, stderr=stderr, stdout=stdout)
 
 
