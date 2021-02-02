@@ -1,4 +1,10 @@
 #! /bin/env bash
+
+HEAD='\e[7;36m'
+RESET='\e[m'
+CMD='\e[32m'
+NL='echo '
+
 flag=$1
 case "$flag" in
 
@@ -79,4 +85,7 @@ echo "alias rm='trash-put' >> bash-alias
 EOF
 ;;
 
+--how-pypi)
+echo -e "$HEAD HOW TO COMPILE BDIST SDIST$RESET"
+echo -e "${CMD}python setup.py bdist_wheel or sdist ${NL}twine upload dist/* --verbose${RESET}"
 esac

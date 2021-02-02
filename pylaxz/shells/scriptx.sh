@@ -1,5 +1,11 @@
 #! /bin/env bash
-version=1.0
+
+HEAD='\e[7;36m'
+RESET='\e[m'
+CMD='\e[32m'
+NL='echo '
+
+version=0.3.0
 flag=$1
 case "$flag" in
 --help-long)
@@ -27,7 +33,7 @@ case "$flag" in
     printf "    --issue-opencv      issues about opencv.\n\n"
 ;;
 
---help)
+--help-lxz)
 printf "FOR ALL ARCH:"
 printf "    --lxz-DE\n"
 printf "    --help\n"
@@ -70,9 +76,6 @@ shell script version : $version
 EOF
 ;;
 
-
-
-
 --issue-opencv)
 cat << EOF
 "installing required build dependencies."
@@ -89,14 +92,6 @@ cat << EOF
 "https://github.com/pjreddie/darknet/issues/1886#issuecomment-547668240 > "
     sudo apt install libopencv-dev
 EOF
-;;
-
---has-internet)
-    echo -e "Checking internet connection ..." ;
-    wget -q -T 1 --spider http://example.com ;
-    if [ $? -eq 0 ] ; then echo "Internet connection is Good." ;
-    else echo -e "No Internet Connection!" ;
-    fi
 ;;
 
 *)
