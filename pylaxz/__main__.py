@@ -117,12 +117,20 @@ def main(direct=True):
                     lines = f.readlines()
                 DKX_OPTS=[i[:-2] for i in lines if i.startswith('--')]
 
+                CHECKX_PATH = "bash " + SCRIPT_PATH + "checkx.sh "
+                with open(CHECKX_PATH[5:-1], 'r') as f:
+                    lines = f.readlines()
+                CHECKX_OPTS=[i[:-2] for i in lines if i.startswith('--')]
+
                 if c_val == '--help':
-                    _logxs_out([SYSX_OPTS, SCRIPTX_OPTS, HOWX_OPTS, DKX_OPTS])
+                    _logxs_out([SYSX_OPTS, SCRIPTX_OPTS, HOWX_OPTS, DKX_OPTS, CHECKX_OPTS])
 
                 elif c_val in SYSX_OPTS:
                     assert os.uname()[-1] == 'x86_64'
                     _call_shell(cmd=SYSX_PATH + c_val)
+
+                elif c_val in CHECKX_OPTS:
+                    _call_shell(cmd=CHECKX_PATH + c_val)
 
                 elif c_val in HOWX_OPTS:
                     _call_shell(cmd=HOWX_PATH + c_val)

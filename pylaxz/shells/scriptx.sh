@@ -2,12 +2,12 @@
 
 HEAD='\e[7;36m'
 RESET='\e[m'
-CMD='\e[32m'
-NL='echo '
+OUTPUT='\e[32m'
+NL='\n'
+ERROR='\e[3;31m'
 
 version=0.3.0
-flag=$1
-case "$flag" in
+case "$1" in
 --help-long)
     printf "    --lxz-DE        this will remind me to install what i need.\n"
     printf "    --help-long     show this help message and exit\n"

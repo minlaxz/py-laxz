@@ -2,11 +2,11 @@
 
 HEAD='\e[7;36m'
 RESET='\e[m'
-CMD='\e[32m'
-NL='echo '
+OUTPUT='\e[32m'
+NL='\n'
+ERROR='\e[3;31m'
 
-flag=$1
-case "$flag" in
+case "$1" in
 
 --how-find-mv)
 cat<<EOF
