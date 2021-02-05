@@ -80,6 +80,15 @@ case "$1" in
     fi
     ;;
 
+--domain-ip)
+    if [[ $2 == "" ]]; then
+        read -p "Enter Domain Name > " uservar
+    else
+        uservar=$2
+    fi
+    echo -e "${OUTPUT}$(dig a +short $uservar) ${RESET}"
+    ;;
+
 --is-installed)
     read -p "which package [ list ALL] " uservar
     if [ $uservar != "" ]; then
