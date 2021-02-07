@@ -5,6 +5,7 @@ RESET='\e[m'
 OUTPUT='\e[32m'
 NL='\n'
 ERROR='\e[3;31m'
+WARN='\e[3;33m'
 
 function has_sudo() {
     dpkg-query -l sudo >/dev/null 2>&1
@@ -34,6 +35,10 @@ case "$1" in
     dpkg -S $uservar
     ;;
 
+# --expose-port)
+#     read -p "Enter port number to expose > " uservar
+#     TODO
+# ;;
 --opencv-pi)
     echo -e "${OUTPUT}
 sudo apt-get install python3-venv

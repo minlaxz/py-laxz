@@ -5,6 +5,7 @@ RESET='\e[m'
 OUTPUT='\e[32m'
 NL='\n'
 ERROR='\e[3;31m'
+WARN='\e[3;33m'
 
 function has_sudo() {
     dpkg-query -l sudo >/dev/null 2>&1
@@ -78,6 +79,12 @@ case "$1" in
     else
         echo "'nmap' is needed."
     fi
+    ;;
+
+--all-info)
+    echo -e "${OUTPUT}"
+    cat /etc/*-release | uniq -u
+    echo -e "${RESET}"
     ;;
 
 --domain-ip)

@@ -5,13 +5,14 @@ RESET='\e[m'
 OUTPUT='\e[32m'
 NL='\n'
 ERROR='\e[3;31m'
+WARN='\e[3;33m'
 
-version=0.3.0
+version=0.2.10
 case "$1" in
 --help-long)
     printf "    --lxz-DE        this will remind me to install what i need.\n"
     printf "    --help-long     show this help message and exit\n"
-    printf "    --version       show lxz version\n\n"
+    printf "    --version       show help version\n\n"
 
     # printf "    --expose            exposing local service or fs to the internet\n\n"
 
