@@ -1,17 +1,22 @@
-#### Python Utility for Sys Admin or Personal Use.
+#### A Utility for Sys Admin or Personal Use (Intergrated with SHELL).
 
-### Installation
+__TODO__ to integrate with ORM relational databases.
+
+
+### Installation (any platform)
 ```
 $ python3 -m pip install --no-cache-dir --upgrade py-laxz
 ```
 
-### Usage (as binary)
+### Usage (as script)
 ```
-$ pylaxz -option(s) argument(s)
-$ pylaxz -h # for help
+$ pylaxz --help # for options
+$ pylaxz -N --help # for Network options
+$ pylaxz -S --help # for System options
+$ pylaxz -L --help # for SHELL options
 ```
 
-### Usage (or you can use it as direct module)
+### Rare Usage (as direct)
 ```
 $ python3 -m pylaxz -h
 ```
@@ -22,15 +27,6 @@ $ python3 -m pylaxz -h
 >>> printf(ANYTHING)
 ```
 
-### Submodule endpoints
-    1. pylaxz.utils.logxs.printf
-    2. pylaxz.utils.check
-        1. internet # checking internet connection
-        2. speed    # check internet speed
-        3. ip       # check ipaddress
-        4. os_info  # check os information
-        5. hw_info  # check hardware information
-
 if you have time : 
 
 ``` 
@@ -39,5 +35,5 @@ if you have time :
 >>> help(pylaxz)
 ```
 
-+ printf is logger function and works well with python's data types
++ printf is logger function and works well with various python's data types
 + and also with numpy's data shapes.
