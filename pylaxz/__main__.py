@@ -122,8 +122,13 @@ def main(direct=True):
                     lines = f.readlines()
                 CHECKX_OPTS=[i[:-2] for i in lines if i.startswith('--')]
 
+                OUTLINEX_PATH = "bash " + SCRIPT_PATH + "outlinex.sh "
+                with open(OUTLINEX_PATH[5:-1], 'r') as f:
+                    lines = f.readlines()
+                OUTLINEX_OPTS=[i[:-2] for i in lines if i.startswith('--')]
+
                 if c_val == '--help':
-                    _logxs_out([SYSX_OPTS, SCRIPTX_OPTS, HOWX_OPTS, DKX_OPTS, CHECKX_OPTS])
+                    _logxs_out([SYSX_OPTS, SCRIPTX_OPTS, HOWX_OPTS, DKX_OPTS, CHECKX_OPTS, OUTLINEX_OPTS])
 
                 elif c_val in SYSX_OPTS:
                     assert os.uname()[-1] == 'x86_64'
@@ -140,6 +145,9 @@ def main(direct=True):
 
                 elif c_val in DKX_OPTS:
                     _call_shell(cmd=DKX_PATH + c_val)
+
+                elif c_val in OUTLINEX_OPTS:
+                    _call_shell(cmd=OUTLINEX_PATH + c_val)
 
                 else:
                     _logxs_out("Not an option ({}),  -L --help for help.".format(c_val))
