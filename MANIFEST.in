@@ -1,2 +1,3 @@
 include pylaxz/shells/*.sh
 include pylaxz/data/*
+include pylaxz/shells/*.py

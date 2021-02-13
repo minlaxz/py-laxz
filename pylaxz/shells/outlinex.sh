@@ -62,13 +62,6 @@ case "$1" in
     curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/access-keys | jq '.accessKeys'
     ;;
 
---outline-metrics-one)
-    curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/access-keys | jq '.accessKeys'
-    read -p "Enter ID: " id
-    curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/metrics/transfer | jq --arg id "$id" '.bytesTransferredByUserId[$id]'
-    # curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/access-keys | jq  --arg id "$id" '.accessKeys[$id]'
-    ;;
-
 --outline-create-new)
     curl --insecure -s -H "Content-Type: application/json" -d "$(generate_user_name)" -X POST $API_URL/access-keys
     if [[ $? -eq 0 ]]; then
@@ -76,7 +69,7 @@ case "$1" in
     fi
     ;;
 
---outline-id-datalimit)
+--outline-set-datalimit)
     curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/access-keys | jq '.accessKeys'
     read -p "Enter ID : " id
     curl --insecure -H "Content-Type: application/json" -d "$(generate_id_datalimit)" -X PUT $API_URL/access-keys/${id}/data-limit
@@ -91,10 +84,43 @@ case "$1" in
     curl --insecure -H "Content-Type: application/json" -d "$(generate_user_rename)" -X PUT $API_URL/access-keys/${id}/name
     ;;
 
---outline-metrics-transfer)
-    curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/metrics/transfer | jq '.bytesTransferredByUserId'
+--outline-metrics-one)
+    curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/access-keys | jq '.accessKeys'
+    read -p "Enter ID: " id
+    bytes=$(curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/metrics/transfer | jq --arg id "$id" '.bytesTransferredByUserId[$id]')
+    numfmt --to=iec-i --format='%.3f' <<< $bytes
+    curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/access-keys | jq  --arg id "$id" -c '.accessKeys[] | select(.id==$id)' | jq '.'
+    ;;
+
+--outline-metrics-total)
+    metrics=$(curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/metrics/transfer | jq -c '.bytesTransferredByUserId')
+    # echo "The script you are running has basename `basename "$0"`, dirname `dirname "$0"`"
+    # echo "The present working directory is `pwd`"
+    python3 `dirname "$0"`"/pyParser.py" ${metrics}
+    ;;
+
+--outline-metrics-all)
+    metrics=$(curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/metrics/transfer | jq -c '.bytesTransferredByUserId')
+    user_lists=$(curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/access-keys | jq -c '.accessKeys')
+    python3 `dirname "$0"`"/pyParser.py" ${metrics} ${user_lists}
+    ;;
+
+--outline-metrics-one-details)
+    metrics=$(curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/metrics/transfer | jq -c '.bytesTransferredByUserId')
+    user_lists=$(curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/access-keys | jq -c '.accessKeys')
+    read -p "Enter ID: " id
+    python3 `dirname "$0"`"/pyParser.py" ${metrics} ${user_lists} ${id}
+    ;;
+
+--outline-generate-qr)
+    read -p "enter ss key: " ss_key
+    qrcode-terminal-py -d $ss_key
     ;;
 *)
     echo -e "${ERROR}not an option.${RESET}"
     ;;
 esac
+
+
+# jq -c '.accessKeys[] | select(.id=="0")'
+# jq -c '.accessKeys[] | select(.id | contains("0"))'
