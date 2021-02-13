@@ -94,7 +94,6 @@ case "$1" in
 --outline-metrics-transfer)
     curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/metrics/transfer | jq '.bytesTransferredByUserId'
     ;;
-
 *)
     echo -e "${ERROR}not an option.${RESET}"
     ;;

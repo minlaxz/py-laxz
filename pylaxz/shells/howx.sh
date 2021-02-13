@@ -10,100 +10,121 @@ WARN='\e[3;33m'
 case "$1" in
 
 --how-find-mv)
+    echo -e "${HEAD}FIND and MOVE"
+    echo -e "${RESET}${OUTPUT}"
     cat <<EOF
-cmd:
-    find . -maxdepth 2 -name "*.mp4" -exec mv {} . \;
-explain:
-    search for files in a directory hierarchy.
-    -maxdepth levels
-    -name pattern
-    -exec command ;
+    "find . -maxdepth 2 -name '*.mp4' -exec mv {} . \;"
 EOF
     ;;
 
 --how-copy)
+    echo -e "${HEAD}COPY with Progress bar"
+    echo -e "${RESET}${OUTPUT}"
     cat <<EOF
-cmd:
-    rsync -ah --progress FROM_FILE TO_FILE
-explain:
-    a fast, versatile, remote (and local) file-copying tool
-    -a, --archive
-    -h, --human-readable
-    --progress
+    "rsync -ah --progress FROM_FILE TO_FILE"
 EOF
     ;;
 
 --how-compress)
-    echo "Need pixz"
+    echo -e "${HEAD}Parallel COMPRESS (needs pixz)"
+    echo -e "${RESET}${OUTPUT}"
     cat <<EOF
-cmd:
-    tar cvf - ./FILE | pixz -p 4 > COMPRESS.tpxz
-explain:
-    -c, --create
-    -v, --verbose
-    -f, --file ARCHIVE (- means print data to stdout)
-    > redirect to tpxz file
+    "tar cvf - ./FILE | pixz -p 4 > COMPRESS.tpxz"
 EOF
     ;;
 
 --how-decompress)
-    echo "Need pixz"
+    echo -e "${HEAD}Parallel DECOMPRESS (needs pixz)"
+    echo -e "${RESET}${OUTPUT}"
     cat <<EOF
-cmd:
-    pixz -x -p 4 < COMPRESS.tpxz | tar xv -C path/to/dir
-explain:
-    < reirect file stream to pixz
-    -x, --extract, --get
-    -v, --verbose
-    -C, --directory DIR
+    "pixz -x -p 4 < COMPRESS.tpxz | tar xv -C path/to/dir"
 EOF
     ;;
 
 --how-enc)
-    echo "openssl enc -aes-256-cbc -salt -pbkdf2 -in ORIG_FILE -out ENCTYPTED"
-    echo "echo 'TEXT' | openssl enc -e -aes-256-cbc -a -salt -pbkdf2"
-    echo ""
-    echo "openssl rand 256 >symme.key"
-    echo "openssl enc -aes-256-cbc -salt -pbkdf2 -in ORIG_FILE -out ENCRYPTED -k KEYFILE"
-    echo "echo 'TEXT' | openssl enc -e -aes-256-cbc -a -salt -pbkdf2 -k KEYFILE"
-    echo "FOR RSA https://gist.github.com/minlaxz/71a997c38665aa2fe530a6b4ba4308ed#rsa-encryptions"
+    echo -e "${HEAD}   ENCRYPTION   ${RESET}"
+    echo -e "${WARN}----with password----${RESET}"
+
+    echo -e "${OUTPUT}"
+    cat <<EOF
+    "openssl enc -aes-256-cbc -salt -pbkdf2 -in ORIG_FILE -out ENCTYPTED"
+    "echo 'TEXT' | openssl enc -e -aes-256-cbc -a -salt -pbkdf2"
+EOF
+    echo -e "${RESET}"
+
+    echo -e "${WARN}----with keyfile----${RESET}"
+    echo -e "${OUTPUT}"
+    cat <<EOF
+    "openssl rand 256 >symme.key"
+    "openssl enc -aes-256-cbc -salt -pbkdf2 -in ORIG_FILE -out ENCRYPTED -k KEYFILE"
+    "echo 'TEXT' | openssl enc -e -aes-256-cbc -a -salt -pbkdf2 -k KEYFILE"
+EOF
+    echo -e "${RESET}"
+    echo -e "${WARN}Read_RSA_Encryption @ https://gist.github.com/minlaxz/71a997c38665aa2fe530a6b4ba4308ed#rsa-encryptions"
     ;;
 
 --how-dec)
-    echo "openssl enc -aes-256-cbc -d -salt -pbkdf2 -in ENCRYPTED -out ORIG_FILE"
-    echo "echo 'CIPHER-TEXT' | openssl enc -e -aes-256-cbc -a -d -salt -pbkdf2"
-    echo ""
-    echo "openssl enc -aes-256-cbc -d -salt -pbkdf2 -in ENCRYPTED -out ORIG_FILE -k KEYFILE"
-    echo "echo 'CIPHER-TEXT' | openssl enc -e -aes-256-cbc -a -salt -pbkdf2 -d -k KEYFILE"
-    echo "FOR RSA https://gist.github.com/minlaxz/71a997c38665aa2fe530a6b4ba4308ed#rsa-encryptions"
+    echo -e "${HEAD}   DECRYPTION   ${RESET}"
+    echo -e "${WARN}----with password----${RESET}"
+
+    echo -e "${OUTPUT}"
+    cat <<EOF
+    "openssl enc -aes-256-cbc -d -salt -pbkdf2 -in ENCRYPTED -out ORIG_FILE"
+    "echo 'CIPHER-TEXT' | openssl enc -e -aes-256-cbc -a -d -salt -pbkdf2"
+EOF
+    echo -e "${RESET}"
+
+    echo -e "${WARN}----with keyfile----${RESET}"
+    echo -e "${OUTPUT}"
+    cat <<EOF
+    "openssl enc -aes-256-cbc -d -salt -pbkdf2 -in ENCRYPTED -out ORIG_FILE -k KEYFILE"
+    "CIPHER-TEXT' | openssl enc -e -aes-256-cbc -a -salt -pbkdf2 -d -k KEYFILE"
+EOF
+    echo -e "${RESET}"
+    echo -e "${WARN}Read_RSA_Decryption @ https://gist.github.com/minlaxz/71a997c38665aa2fe530a6b4ba4308ed#rsa-decryptions"
     ;;
 
 --how-safe-rm)
+    echo -e "${HEAD}Safe REMOVE (needs trash-cli)"
+    echo -e "${RESET}${OUTPUT}"
     cat <<EOF
-sudo apt install trash-cli
-echo "alias rm='trash-put' >> bash-alias
+    "alias rm='trash-put' >> bash-alias"
 EOF
     ;;
 
 --how-pypi)
-    echo -e "$HEAD HOW TO COMPILE BDIST SDIST$RESET"
-    echo -e "${OUTPUT}python setup.py bdist_wheel or sdist ${NL}twine upload dist/* --verbose${RESET}"
+    echo -e "${HEAD}Compiling PYPI (needs twine)"
+    echo -e "${RESET}${OUTPUT}"
+    cat <<EOF
+    "python setup.py bdist_wheel or sdist"
+    "twine upload dist/* --verbose"
+EOF
     ;;
 
 --how-forward-ssh)
-    echo -e "${HEAD}HOW TO FORWARD SSH${RESET}"
-    echo -e "${WARN}These commands should be run in local machine.${NL}Forwarding remote port to local port${RESET}"
-    echo -e "${NL}${WARN}REMOTE PORT => LOCAL PORT${RESET}"
-    echo -e "${OUTPUT}ssh -L 2222:localhost:22 -C -N -l RUSER RHOST${RESET}"
-    echo -e "${WARN}RHOST localhost 22 => LHOST localhost 2222"
-    echo -e "${OUTPUT}ssh -L 0.0.0.0:2222:localhost:22 -C -N -l RUSER RHOST${RESET}"
-    echo -e "${WARN}RHOST localhost 22 => LHOST ipaddress 2222"
-    echo -e "${OUTPUT}ssh -L localhost:2222:0.0.0.0:22 -C -N -l RUSER RHOST${RESET}"
-    echo -e "${WARN}RHOST ipaddress 22 => LHOST localhost 2222"
+    echo -e "${HEAD}Forward SSH REMOVE${RESET}"
+    echo -e "${WARN}"
+    cat <<EOF
+    These commands should be run in local machine.
+    Forwarding remote port to local port
+    REMOTE PORT => LOCAL PORT
+EOF
+    echo -e "${RESET}${OUTPUT}"
+    cat <<EOF
+    "ssh -L 2222:localhost:22 -C -N -l RUSER RHOST"
+    RHOST localhost 22 => LHOST localhost 2222
+    "ssh -L 0.0.0.0:2222:localhost:22 -C -N -l RUSER RHOST"
+    RHOST localhost 22 => LHOST ipaddress 2222
+    "ssh -L localhost:2222:0.0.0.0:22 -C -N -l RUSER RHOST"
+    RHOST ipaddress 22 => LHOST localhost 2222
+EOF
     ;;
 
 --how-reverse-ssh)
-    echo -e "${HEAD}HOW TO REVERSE SSH${RESET}"
-    echo -e "${OUTPUT}ssh -R 2222:localhost:22 laxz@192.168.0.16 -N${RESET}"
+    echo -e "${HEAD}Reverse SSH"
+    echo -e "${RESET}${OUTPUT}"
+    cat <<EOF
+    "ssh -R 2222:localhost:22 laxz@192.168.0.16 -N"
+EOF
     ;;
 esac
