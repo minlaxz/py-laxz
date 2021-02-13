@@ -114,7 +114,7 @@ case "$1" in
 
 --outline-generate-qr)
     read -p "enter ss key: " ss_key
-    qrcode-terminal-py -d $ss_key
+    qr $ss_key
     ;;
 *)
     echo -e "${ERROR}not an option.${RESET}"
