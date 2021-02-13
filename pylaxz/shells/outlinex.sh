@@ -115,7 +115,7 @@ case "$1" in
 --outline-generate-qr)
     curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/access-keys | jq '.accessKeys'
     read -p "Enter ID or Name: " id
-    ss=$(curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/access-keys | jq  --arg id "$id" -c '.accessKeys[] | select(.id==$id)' | jq '.accessUrl')
+    ss=$(curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/access-keys | jq  --arg id "$id" -c '.accessKeys[] | select(.id==$id)' | jq '.accessUrl' | sed 's/^.//;s/.$//')
     qr $ss
     ;;
 *)
