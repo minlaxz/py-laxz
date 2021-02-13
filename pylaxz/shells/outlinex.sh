@@ -108,13 +108,15 @@ case "$1" in
 --outline-metrics-one-details)
     metrics=$(curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/metrics/transfer | jq -c '.bytesTransferredByUserId')
     user_lists=$(curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/access-keys | jq -c '.accessKeys')
-    read -p "Enter ID: " id
+    read -p "Enter ID or Name: " id
     python3 `dirname "$0"`"/pyParser.py" ${metrics} ${user_lists} ${id}
     ;;
 
 --outline-generate-qr)
-    read -p "enter ss key: " ss_key
-    qr $ss_key
+    curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/access-keys | jq '.accessKeys'
+    read -p "Enter ID or Name: " id
+    ss=$(curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/access-keys | jq  --arg id "$id" -c '.accessKeys[] | select(.id==$id)' | jq '.accessUrl')
+    qr $ss
     ;;
 *)
     echo -e "${ERROR}not an option.${RESET}"
