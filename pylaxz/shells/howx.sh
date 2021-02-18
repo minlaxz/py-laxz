@@ -127,4 +127,20 @@ EOF
     "ssh -R 2222:localhost:22 laxz@192.168.0.16 -N"
 EOF
     ;;
+
+--how-monitor-bandwidth)
+    echo -e "${HEAD}Monitor Bandwidth"
+    echo -e "${RESET}${OUTPUT}"
+    cat <<EOF
+    # 1. Overall bandwidth - nload, bmon, slurm, bwm-ng, cbm, speedometer, netload
+
+    # 2. Overall bandwidth (batch style output) - vnstat, ifstat, dstat, collectl
+
+    # 2. Bandwidth per socket connection - iftop, iptraf, tcptrack, pktstat, netwatch, trafshow
+
+    # 3. Bandwidth per process - nethogs
+EOF
+    ;;
 esac
+
+

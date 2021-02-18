@@ -133,6 +133,7 @@ def main(direct=True):
                 XX_OPTS=[i[:-2] for i in lines if i.startswith('--')]
 
                 if c_val == '--help':
+                    _logxs_out("hiya! (ن╹◡╹)੭”")
                     _logxs_out([SYSX_OPTS, SCRIPTX_OPTS, HOWX_OPTS, DKX_OPTS, CHECKX_OPTS, OUTLINEX_OPTS, XX_OPTS])
 
                 elif c_val in SYSX_OPTS:
@@ -185,7 +186,7 @@ def _logxs_out(msg):
 def _updater():
     _logxs_out("updating the script...")
     cmd = "find . -maxdepth 2 -name '*.py' -print0 | xargs -0 sha1sum | sort -h | sha256sum | awk '{print $1}'"
-    _call_shell(cmd, return_=False)
+    _call_shell(cmd)
 
 
 if __name__ == "__main__":

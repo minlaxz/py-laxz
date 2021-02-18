@@ -22,6 +22,22 @@ function has_nmap() {
     return $?
 }
 
+function error_no_wget() {
+    echo -e "${ERROR}'wget' is needed.${RESET}${NL}"
+}
+
+function error_no_sudo() {
+    echo -e "${ERROR}'sudo' is needed.${RESET}${NL}"
+}
+
+function error_no_nmap() {
+    echo -e "${ERROR}'nmap' is needed.${RESET}${NL}"
+}
+
+function error_no_internet() {
+    echo -e "${ERROR}'Internet Connection' is needed.${RESET}"
+}
+
 case "$1" in
 --has-internet)
     has_wget
@@ -31,24 +47,24 @@ case "$1" in
         if [ $? -eq 0 ]; then
             echo -e "${OUTPUT}Internet connection is Good.${RESET}${NL}"
         else
-            echo -e "${OUTPUT}No Internet Connection!${RESET}${NL}"
+            error_no_internet
         fi
     else
-        echo -e "${ERROR}'wget' is needed.${RESET}${NL}"
+        error_no_wget
     fi
 
     ;;
 --port-service)
     has_sudo
     if [[ $? == 0 ]]; then
-        read -p "which port [ALL] : " uservar
-        if [ $uservar != "" ]; then
-            sudo lsof -i:$uservar
+        read -p "which port [ALL] : " port
+        if [ $port != "" ]; then
+            sudo lsof -i:$port
         else
             sudo lsof -i -P -n | grep -i "LISTEN"
         fi
     else
-        echo -e "${ERROR}'sudo' is needed.${RESET}${NL}"
+        error_no_sudo
     fi
     ;;
 
@@ -64,7 +80,7 @@ case "$1" in
                 read -p "Enter SPECIFIC HOST's IPADDRESS: " uservar
                 sudo nmap -sTU -O $uservar
             else
-                echo -e "${ERROR}'sudo' is needed.${RESET}${NL}"
+                error_no_sudo
             fi
             ;;
         2)
@@ -77,7 +93,7 @@ case "$1" in
         *) echo -e "Not an option." ;;
         esac
     else
-        echo "'nmap' is needed."
+        error_no_nmap
     fi
     ;;
 
@@ -88,12 +104,13 @@ case "$1" in
     ;;
 
 --domain-ip)
-    if [[ $2 == "" ]]; then
-        read -p "Enter Domain Name > " uservar
+    read -p "Enter Domain Name > " uservar
+    has_internet
+    if [[ $? -eq 0 ]] ; then
+        echo -e "${OUTPUT}$(dig a +short $uservar) ${RESET}"
     else
-        uservar=$2
+        error_no_internet
     fi
-    echo -e "${OUTPUT}$(dig a +short $uservar) ${RESET}"
     ;;
 
 --is-installed)
@@ -105,7 +122,7 @@ case "$1" in
         if [[ $? == 0 ]]; then
             sudo dpkg-query -Wf '${Installed-size}\t${Package}\n' | column -t
         else
-            echo "'sudo' is needed."
+            error_no_sudo
         fi
     fi
     ;;

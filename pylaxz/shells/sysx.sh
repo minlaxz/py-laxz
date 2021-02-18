@@ -7,6 +7,10 @@ NL='\n'
 ERROR='\e[3;31m'
 WARN='\e[3;33m'
 
+function error_no_sudo() {
+    echo -e "${ERROR}'sudo' is needed.${RESET}${NL}"
+}
+
 function has_sudo() {
     dpkg-query -l sudo >/dev/null 2>&1
     return $?
@@ -20,7 +24,7 @@ case "$1" in
         sudo apt update && sudo apt upgrade -y
         echo -e "${RESET}${NL}"
     else
-        echo -e "${ERROR}'sudo' is needed.${RESET}${NL}"
+        error_no_sudo
     fi
     ;;
 
@@ -31,7 +35,7 @@ case "$1" in
     ;;
 
 --which-bin)
-    read -p "Which command [NONE] : " uservar
+    read -p "Which command: " uservar
     dpkg -S $uservar
     ;;
 
