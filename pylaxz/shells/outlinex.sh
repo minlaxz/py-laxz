@@ -118,6 +118,14 @@ case "$1" in
     ss=$(curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/access-keys | jq  --arg id "$id" -c '.accessKeys[] | select(.id==$id)' | jq '.accessUrl' | sed 's/^.//;s/.$//')
     qr $ss
     ;;
+
+--outline-temp-disable)
+    metrics=$(curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/metrics/transfer | jq -c '.bytesTransferredByUserId')
+    user_lists=$(curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/access-keys | jq -c '.accessKeys')
+    cd `dirname "$0"`
+    python3 -B -c "import pyParser as p; p.caller(${user_list}, ${metrics})"
+    ;;
+
 *)
     echo -e "${ERROR}not an option.${RESET}"
     ;;

@@ -53,8 +53,15 @@ def detail_information(*arg):
         for i in access_key_dicts:
             printf(json.dumps(i, indent=4, sort_keys=False), _int=1)
 
+def caller(*arg):
+    users = arg[0]
+    printf(users)
+    print("")
+    metrics = arg[1]
+    printf(metrics)
+
 if __name__ == "__main__":
     if len(sys.argv) == 2: overview_metrics()
     elif len(sys.argv) == 3: detail_information()
     elif len(sys.argv) == 4: detail_information(sys.argv[3])
-    else: printf('Error too many args : {}'.format(len(sys.argv)), _err=True, _int=1)
+    else: printf('Error few many args : {}'.format(len(sys.argv)), _err=True, _int=1)
