@@ -70,15 +70,27 @@ case "$1" in
     echo -e "${CMD}docker pull alpine:latest${RESET}"
     ;;
 
---dk-inspect-port-bindings)
-    read -p "ENter ID: " INSTANCE_ID
-    docker inspect --format='{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}' $INSTANCE_ID
+--dk-port-bindings)
+    if [[ ! $2 ]]; then
+        bash $(dirname "$0")"/dkx.sh" --dk-ps-short
+        read -p "Enter Container ID: " cid
+    else
+        cid=$2
+    fi
+    echo -e "${OUTPUT}"
+    docker inspect --format='{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}' $cid
     # docker container port ID (also works)
+    echo -e "${RESET}"
     ;;
 
 --dk-stats)
-    read -p "ID : " INSTANCE_ID
-    docker stats $INSTANCE_ID
+    if [[ ! $2 ]]; then
+        bash $(dirname "$0")"/dkx.sh" --dk-ps-short
+        read -p "Enter Container ID: " cid
+    else
+        cid=$2
+    fi
+    docker stats $cid
     ;;
 
 --dk-install-compose)
@@ -157,18 +169,27 @@ case "$1" in
     echo -e "${RESET}"
     ;;
 
---dk-ip)
+--dk-ps-short)
     echo -e "${OUTPUT}"
-    docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Ports}}"
+    docker ps -a --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Image}}"
     echo -e "${RESET}"
-    read -p "Container ID?: " id
+    ;;
+
+--dk-ip)
+    if [[ ! $2 ]]; then
+        bash $(dirname "$0")"/dkx.sh" --dk-ps-short
+        read -p "Enter Container ID: " cid
+    else
+        cid=$2
+    fi
     echo -e "${OUTPUT}"
-    docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $id
+    # docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Ports}}"
+    echo -e "IP: " $(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $cid)
     echo -e "${RESET}"
     ;;
 
 *)
-    echo -e "${HEAD}${ERROR}>>>dkx.sh: Internal Error<<<${RESET}"
+    echo -e "${HEAD}${ERROR}>>>dkx.sh: Internal Error $?<<<${RESET}"
     ;;
 
 esac
