@@ -20,7 +20,7 @@ More information is available at:
 """
 # Standard library imports
 from subprocess import run  # , PIPE, Popen, STDOUT
-from sys import argv, stdout, stderr
+from sys import argv, stdout, stderr, exit
 import getopt
 import os
 
@@ -173,8 +173,14 @@ def main(direct=True):
 #     db.commit()
 
 def _call_shell(cmd):
-    run(cmd, shell=True, stderr=stderr, stdout=stdout)
-
+    try:
+        run(cmd, shell=True, stderr=stderr, stdout=stdout)
+    except KeyboardInterrupt:
+        print('User Abord.')
+        exit(0)
+    except Exception as e:
+        print(e)
+        exit(1)
 
 def _logxs_out(msg):
     if isinstance(msg, list):

@@ -153,13 +153,13 @@ case "$1" in
 
 --dk-ps)
     echo -e "${OUTPUT}"
-    docker ps --format "table {{.ID}}\t{{.Name}}\t{{.Ports}}\t{{.Image}}\t{{.Command}}"
+    docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}\t{{.Image}}\t{{.Command}}"
     echo -e "${RESET}"
     ;;
 
 --dk-ip)
     echo -e "${OUTPUT}"
-    docker ps --format "table {{.ID}}\t{{.Name}}\t{{.Image}}\t{{.Ports}}"
+    docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Ports}}"
     echo -e "${RESET}"
     read -p "Container ID?: " id
     echo -e "${OUTPUT}"
