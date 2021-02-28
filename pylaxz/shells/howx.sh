@@ -141,6 +141,48 @@ EOF
     # 3. Bandwidth per process - nethogs
 EOF
     ;;
+
+--how-nc-tx-rx)
+    echo -e "${OUTPUT}"
+    cat <<EOF
+Decription : How to send and receive file with 'ncat'
+    MINIMAL
+        TX => nc -w 3 IPADDRESS 1234 < giving_a_file
+        RX => nc -l -p 1234 > receiving_a_file
+
+        TX => tar cf - ./FILE | nc -w 3 IPADDRESS 1234
+        RX => nc -l -p 1234 | tar x
+
+        TX => dd if=/dev/hda3 | gzip -9 | nc -l -p 1324
+        RX => nc IPADDRESS 1234 | pv -b > FILE.gz
+
+        TX => tar -zcf - ./FILE | pv | nc -l -p 1234 -q 5
+        RX => ncat IPADDRESS 1234 | pv | tar -zxf -
+
+    VPS => PRIVATE
+        TX => ncat -l -p 1234 < FILE
+        RX => ncat -w 3 RHOST 1234 > FILE
+EOF
+    echo -e "${RESET}"
+    ;;
+
+--how-src-conns)
+    echo -e "${OUTPUT}"
+    cat <<EOF
+Decription : How many active connections are established to this specific local port
+    TCP UDP: {SRC}
+        ss -tun src ipaddress(optional):PORT | grep -i "estab" | wc -l
+EOF
+    echo -e "${RESET}"
+    ;;
+
+--how-dst-conns)
+    echo -e "${OUTPUT}"
+    cat <<EOF
+Decription : How many active connections are established to this specific remote ipaddress
+    TCP UDP: {DST}
+        ss -tun dst IPADDRESS:port(optional) | grep -i "estab" | wc -l
+EOF
+    echo -e "${RESET}"
+    ;;
 esac
-
-

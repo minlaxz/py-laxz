@@ -13,13 +13,13 @@ case "$1" in
     echo -e "${HEAD}${WARN}Caution : X FUNCTION${RESET}"
     echo -e "${OUTPUT}DECRYPT >- ${enc_api}${RESET}"
     echo $enc_api | openssl enc -e -aes-256-cbc -a -d -salt -pbkdf2
-;;
+    ;;
 
 --x-serve)
-read -p "Enter Port: " port
+    read -p "Enter Port [6969]: " port
     if [[ $port == "" ]]; then
-        port=8000
+        port=6969
     fi
     sudo python3 -m http.server $port
-;;
+    ;;
 esac

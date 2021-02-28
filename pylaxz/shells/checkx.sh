@@ -22,6 +22,11 @@ function has_nmap() {
     return $?
 }
 
+function has_internet() {
+    wget -q -T 5 --spider http://example.com
+    return $?
+}
+
 function error_no_wget() {
     echo -e "${ERROR}'wget' is needed.${RESET}${NL}"
 }
@@ -43,7 +48,7 @@ case "$1" in
     has_wget
     if [[ $? == 0 ]]; then
         echo -e "${HEAD}Checking internet connection ...${RESET}"
-        wget -q -T 1 --spider http://example.com
+        has_internet
         if [ $? -eq 0 ]; then
             echo -e "${OUTPUT}Internet connection is Good.${RESET}${NL}"
         else
@@ -106,7 +111,7 @@ case "$1" in
 --domain-ip)
     read -p "Enter Domain Name > " uservar
     has_internet
-    if [[ $? -eq 0 ]] ; then
+    if [[ $? -eq 0 ]]; then
         echo -e "${OUTPUT}$(dig a +short $uservar) ${RESET}"
     else
         error_no_internet
