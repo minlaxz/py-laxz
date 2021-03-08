@@ -23,12 +23,18 @@ More information is available at:
 # Standard library imports
 from subprocess import run  # , PIPE, Popen, STDOUT
 from sys import argv, stdout, stderr, exit
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from .settings.dbcore import Settings
+
 import click
 import os
 
 # pylaxz imports
 from .utils import logxs, _network, _system
 from .__version__ import version
+from .utils.logxs import printf
 
 VERBOSE=True
 
@@ -39,6 +45,7 @@ CHECK_SHELL = "bash " + SCRIPT_PATH + "checkx.sh "
 HOW_SHELL = "bash " + SCRIPT_PATH + "howx.sh "
 OUTLINE_SHELL = "bash " + SCRIPT_PATH + "outlinex.sh "
 X_SHELL = "bash " + SCRIPT_PATH + "xx.sh "
+SQL_SHELL = "bash " + SCRIPT_PATH + "sqlx.sh "
 
 @click.group()
 def main(direct=True):
@@ -47,6 +54,13 @@ def main(direct=True):
     Info: This is under developement / by minlaxz
     """
     pass
+
+@main.command()
+@click.argument('arg', type=str, required=False)
+def version(**kw):
+    printf(f"Version: {version}", _int=1)
+    print(version)
+
 
 @main.command()
 @click.option('--verbose', '-v', is_flag=True, help="Verbose Extra Option")
@@ -146,6 +160,21 @@ def x(**kw):
                 __callShell(cmd=X_SHELL+ '--x-{0}'.format(kw['arg']))
     except (KeyError, Exception) as e:
         click.echo(f"Internal Error. {e}")
+
+@main.command()
+@click.option('--verbose', '-v', is_flag=True, help="Verbose Extra Option")
+@click.argument('arg',type=str, required=False)
+def sql(**kw):
+    """
+    Description: \ sql options for minlaxz / 
+    """
+    engine = create_engine('sqlite:///settings/commands.db')
+    # Base.metadata.bind = engine
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    proxy = session.query(Settings).all()
+    print(proxy.one_or_none())
+
 
 def __callShell(cmd):
     if VERBOSE: print(cmd)
