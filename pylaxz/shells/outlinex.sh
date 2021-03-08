@@ -119,11 +119,20 @@ case "$1" in
     qr $ss
     ;;
 
---outline-temp-disable)
+
+--outline-one-details)
+    metrics=$(curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/metrics/transfer | jq -c '.bytesTransferredByUserId')
+    user_lists=$(curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/access-keys | jq -c '.accessKeys')
+    flag=1
+    cd `dirname "$0"`
+    python3 -B -c "import pyParser as pyparser; pyparser.details($user_lists, $metrics, $flag)"
+    ;;
+
+--outline-all-details)
     metrics=$(curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/metrics/transfer | jq -c '.bytesTransferredByUserId')
     user_lists=$(curl --insecure -s -H "Content-Type: application/json" -X GET $API_URL/access-keys | jq -c '.accessKeys')
     cd `dirname "$0"`
-    python3 -B -c "import pyParser as p; p.caller(${user_list}, ${metrics})"
+    python3 -B -c "import pyParser as pyparser; pyparser.details($user_lists, $metrics)"
     ;;
 
 *)
