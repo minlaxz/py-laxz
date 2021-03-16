@@ -36,7 +36,7 @@ from .utils import logxs, _network, _system
 from .__version__ import version
 from .utils.logxs import printf
 
-VERBOSE=True
+VERBOSE=False
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 SCRIPT_PATH = os.path.join(DIR_PATH, "shells/")

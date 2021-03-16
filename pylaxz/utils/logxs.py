@@ -7,11 +7,11 @@ License: MIT, see LICENSE for more details.
 """
 
 from rich import print as _p
-
+from rich.markdown import Markdown as _markdown
 # import keyword
 
 
-def printf(*argv, _int=False, _err=False, _shell=False) -> None:
+def printf(*argv, _int=False, _err=False, _shell=False, _md=False) -> None:
     """
 
     Parameters:
@@ -25,7 +25,7 @@ def printf(*argv, _int=False, _err=False, _shell=False) -> None:
     """
     if _int:  # for internal prints and error messages
         for _ in argv:
-            _print_error(_) if _err else _print_internal(_, _shell)
+            _print_error(_) if _err else _print_internal(_, _shell, _md)
     else:  # called for other purpose by user.
         data, data_type, data_shape = [], [], []
         for _ in argv:
@@ -45,8 +45,11 @@ def printf(*argv, _int=False, _err=False, _shell=False) -> None:
                 _print_shape(data_shape[_])
 
 
-def _print_internal(m, _shell) -> None:
-    _p("[magenta]>> {0}[/magenta]".format(m)) if _shell else _p("[magenta]>> \n{0}[/magenta]".format(m))
+def _print_internal(m, _shell, _md) -> None:
+    if _md:
+        _p(_markdown(m))
+    else:
+        _p("[magenta]>> {0}[/magenta]".format(m)) if _shell else _p("[magenta]>> \n{0}[/magenta]".format(m))
 
 
 def _print_error(m) -> None:
