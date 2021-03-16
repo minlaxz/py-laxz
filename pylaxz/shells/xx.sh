@@ -41,4 +41,15 @@ case "$1" in
     fi
     sudo python3 -m http.server $port
     ;;
+
+--x-warp)
+    echo -e "${HEAD}Copy => Advanced/Diagnotics/Client Configuration/ID${RESET}"
+    read -p "Enter Client ID: " client_id
+    if [[ $client_id != "" ]]; then
+        cd $(dirname "$0")
+        python3 -B getdata.py ${client_id}
+    else
+        echo -e "${ERROR}Client ID can't be empty${RESET}"
+    fi
+    ;;
 esac

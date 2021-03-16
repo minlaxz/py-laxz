@@ -24,9 +24,9 @@ More information is available at:
 from subprocess import run  # , PIPE, Popen, STDOUT
 from sys import argv, stdout, stderr, exit
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from .settings.dbcore import Settings
+# from sqlalchemy import create_engine
+# from sqlalchemy.orm import sessionmaker
+# from .settings.dbcore import Settings
 
 import click
 import os
@@ -161,19 +161,19 @@ def x(**kw):
     except (KeyError, Exception) as e:
         click.echo(f"Internal Error. {e}")
 
-@main.command()
-@click.option('--verbose', '-v', is_flag=True, help="Verbose Extra Option")
-@click.argument('arg',type=str, required=False)
-def sql(**kw):
-    """
-    Description: \ sql options for minlaxz / 
-    """
-    engine = create_engine('sqlite:///settings/commands.db')
-    # Base.metadata.bind = engine
-    Session = sessionmaker(bind=engine)
-    session = Session()
-    proxy = session.query(Settings).all()
-    print(proxy.one_or_none())
+# @main.command()
+# @click.option('--verbose', '-v', is_flag=True, help="Verbose Extra Option")
+# @click.argument('arg',type=str, required=False)
+# def sql(**kw):
+#     """
+#     Description: \ sql options for minlaxz / 
+#     """
+#     engine = create_engine('sqlite:///settings/commands.db')
+#     # Base.metadata.bind = engine
+#     Session = sessionmaker(bind=engine)
+#     session = Session()
+#     proxy = session.query(Settings).all()
+#     print(proxy.one_or_none())
 
 
 def __callShell(cmd):
