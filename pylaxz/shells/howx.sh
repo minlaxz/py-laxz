@@ -214,7 +214,7 @@ EOF
 
 --how-trim-vid)
     descriptionOutput "How to trim a video with ffmpeg."
-    OneLineOutput "ffmpeg -i INPUT.mp4 -ss 00:19:00 -to 01:08:37 -c:v copy -c:a copy OUTPUT.mp4"
+    oneLineOutput "ffmpeg -i INPUT.mp4 -ss 00:19:00 -to 01:08:37 -c:v copy -c:a copy OUTPUT.mp4"
     refMd "'Referenced [Here](https://www.arj.no/2018/05/18/trimvideo/)'"
     ;;
 esac

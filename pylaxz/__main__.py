@@ -46,6 +46,7 @@ HOW_SHELL = "bash " + SCRIPT_PATH + "howx.sh "
 OUTLINE_SHELL = "bash " + SCRIPT_PATH + "outlinex.sh "
 X_SHELL = "bash " + SCRIPT_PATH + "xx.sh "
 SQL_SHELL = "bash " + SCRIPT_PATH + "sqlx.sh "
+DO_SHELL = "bash " + SCRIPT_PATH + "dox.sh "
 
 @click.group()
 def main(direct=True):
@@ -160,6 +161,27 @@ def x(**kw):
                 __callShell(cmd=X_SHELL+ '--x-{0}'.format(kw['arg']))
     except (KeyError, Exception) as e:
         click.echo(f"Internal Error. {e}")
+
+
+@main.command()
+@click.option('--verbose', '-v', is_flag=True, help="Verbose Extra Option")
+@click.argument('arg',type=str, required=False)
+def do(**kw):
+    """
+    Description: \ DO options for minlaxz / 
+    """
+    with open(DO_SHELL[5:-1], 'r') as f:
+        lines = f.readlines()
+    DO_OPTS=[i[:-2] for i in lines if i.startswith('--')]
+    try:
+        if kw['arg'] is None:
+            __logxsOut(f"{[i[5:] for i in DO_OPTS]}")
+        else:
+            if ('--do-'+kw['arg']) in DO_OPTS:
+                __callShell(cmd=DO_SHELL+ '--do-{0}'.format(kw['arg']))
+    except (KeyError, Exception) as e:
+        click.echo(f"Internal Error. {e}")
+
 
 # @main.command()
 # @click.option('--verbose', '-v', is_flag=True, help="Verbose Extra Option")
