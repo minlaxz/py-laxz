@@ -43,7 +43,6 @@ case "$1" in
 
 --do-h265)
     descriptionOutput "Convert(Encode) H264 to H265."
-    refMd "'Referenced [Here](https://unix.stackexchange.com/a/38380/318519)'"
     if [[ $(find ./ -name '*.mp4' | wc -l) == 1 ]]; then
         find ./ -name '*.mp4' -exec bash -c 'ffmpeg -i $0 -vcodec libx265 -crf 28 ${0/mp4/r.mp4}' {} \;
     else
@@ -52,11 +51,22 @@ case "$1" in
         ffmpeg -i ${h264}.mp4 -vcodec libx265 -crf 28 ${h264}.r.mp4
     fi
     descriptionOutput "Executed."
+    refMd "'Referenced [Here](https://unix.stackexchange.com/a/38380/318519)'"
+    ;;
+
+--do-mod-h265)
+    descriptionOutput "Convert(Encode) H264 to H265. MANUAL"
+    oneLineOutput "Resonable value for H265 is 24 ~ 30."
+    oneLineOutput "(lower=higher bit rate <bigger size>)."
+    read -p "Enter CRF value (4, 6, 8, [28], even NO.): " crf
+    read -p "Enter Name (without .mp4) : " h264
+    ffmpeg -i ${h264}.mp4 -vcodec libx265 -crf ${crf} ${h264}.r.mp4
+    descriptionOutput "Executed."
+    refMd "'Referenced [Here](https://unix.stackexchange.com/a/38380/318519)'"
     ;;
 
 --do-ts-mp4)
     descriptionOutput "Convert(Encode) TS to MP4."
-    refMd "'Referenced [Here](https://askubuntu.com/a/716457/944917)'"
     if [[ $(find ./ -name '*.ts' | wc -l) == 1 ]]; then
         find ./ -name '*.ts' -exec bash -c 'ffmpeg -i $0 -c:v libx264 -c:a aac ${0/ts/mp4}' {} \;
     else
@@ -65,6 +75,7 @@ case "$1" in
         ffmpeg -i ${ts}.mp4 -vcodec libx265 -crf 28 ${ts}.r.mp4
     fi
     descriptionOutput "Executed."
+    refMd "'Referenced [Here](https://askubuntu.com/a/716457/944917)'"
     ;;
 
 esac
