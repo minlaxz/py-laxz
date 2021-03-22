@@ -34,6 +34,11 @@ function descriptionOutput() {
     echo -e "${WARN}Description : $line ${RESET}"
 }
 
+function warningOutput() {
+    line=$1
+    echo -e "${ERROR}Warning : $line ${RESET}"
+}
+
 case "$1" in
 
 --how-find-mv)
@@ -179,20 +184,21 @@ EOF
     refMdSelf
     ;;
 
-# --how-wireguard)
-#     echo -e "${OUTPUT}"
-#     cat <<EOF
-# sudo apt install wireguard git dh-autoreconf libglib2.0-dev intltool build-essential libgtk-3-dev libnma-dev libsecret-1-dev network-manager-dev resolvconf
-# git clone https://github.com/max-moser/network-manager-wireguard && cd $_
-# ./autogen.sh --without-libnm-glib
-# ./configure --without-libnm-glib --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib/x86_64-linux-gnu --libexecdir=/usr/lib/NetworkManager --localstatedir=/var
-# make && sudo make install
+--how-wireguard)
+    descriptionOutput "How to quick setup Wireguard."
+    echo -e "${OUTPUT}"
+    cat <<EOF
+    sudo apt install wireguard git dh-autoreconf libglib2.0-dev intltool build-essential libgtk-3-dev libnma-dev libsecret-1-dev network-manager-dev resolvconf
+    git clone https://github.com/max-moser/network-manager-wireguard && cd $_
+    ./autogen.sh --without-libnm-glib
+    ./configure --without-libnm-glib --prefix=/usr --sysconfdir=/etc --libdir=/usr/lib/x86_64-linux-gnu --libexecdir=/usr/lib/NetworkManager --localstatedir=/var
+    make && sudo make install
+EOF
+    echo -e "${RESET}"
+    oneLineOutput "Check in Settings/Networks/VPNs"
+    oneLineOutput "used wgcf, test speed 18MB/s"
 
-# Check in Settings/Networks/VPNs
-# used wgcf, test speed 18MB/s
-# EOF
-#     echo -e "${RESET}"
-#     ;;
+    ;;
 
 --how-docker-github)
     descriptionOutput "How to login to Github Packages."
@@ -217,4 +223,5 @@ EOF
     oneLineOutput "ffmpeg -i INPUT.mp4 -ss 00:19:00 -to 01:08:37 -c:v copy -c:a copy OUTPUT.mp4"
     refMd "'Referenced [Here](https://www.arj.no/2018/05/18/trimvideo/)'"
     ;;
+
 esac
