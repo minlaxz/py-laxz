@@ -47,6 +47,7 @@ OUTLINE_SHELL = "bash " + SCRIPT_PATH + "outlinex.sh "
 X_SHELL = "bash " + SCRIPT_PATH + "xx.sh "
 SQL_SHELL = "bash " + SCRIPT_PATH + "sqlx.sh "
 DO_SHELL = "bash " + SCRIPT_PATH + "dox.sh "
+SYS_SHELL = "bash " + SCRIPT_PATH + "sysx.sh "
 
 @click.group()
 def main(direct=True):
@@ -140,6 +141,26 @@ def outline(**kw):
         else:
             if ('--outline-'+kw['arg']) in OUTLINEX_OPTS:
                 __callShell(cmd=OUTLINE_SHELL+ '--outline-{0}'.format(kw['arg']))
+    except (KeyError, Exception) as e:
+        click.echo(f"Internal Error. {e}")
+
+
+@main.command()
+@click.option('--verbose', '-v', is_flag=True, help="Verbose Extra Option")
+@click.argument('arg',type=str, required=False)
+def outline(**kw):
+    """
+    Description: Configuraing system.
+    """
+    with open(SYS_SHELL[5:-1], 'r') as f:
+        lines = f.readlines()
+    SYSX_OPTS=[i[:-2] for i in lines if i.startswith('--')]
+    try:
+        if kw['arg'] is None:
+            __logxsOut(f"{[i[6:] for i in SYSX_OPTS]}")
+        else:
+            if ('--sys-'+kw['arg']) in SYSX_OPTS:
+                __callShell(cmd=SYS_SHELL+ '--sys-{0}'.format(kw['arg']))
     except (KeyError, Exception) as e:
         click.echo(f"Internal Error. {e}")
 
