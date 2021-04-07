@@ -148,7 +148,7 @@ def outline(**kw):
 @main.command()
 @click.option('--verbose', '-v', is_flag=True, help="Verbose Extra Option")
 @click.argument('arg',type=str, required=False)
-def outline(**kw):
+def sys(**kw):
     """
     Description: Configuraing system.
     """
