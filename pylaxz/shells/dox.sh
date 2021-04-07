@@ -78,4 +78,10 @@ case "$1" in
     refMd "'Referenced [Here](https://askubuntu.com/a/716457/944917)'"
     ;;
 
+--do-wg)
+    descriptionOutput "Generate wireguard VPN."
+    ./wgcf generate 
+    sudo wg-quick down ./cf-warp.conf && sudo wg-quick up ./cf-warp.conf
+    descriptionOutput "Executed."
+;;
 esac

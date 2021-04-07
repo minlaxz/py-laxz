@@ -7,6 +7,38 @@ NL='\n'
 ERROR='\e[3;31m'
 WARN='\e[3;33m'
 
+function changeRoot() {
+    cd $(dirname "$0")
+    cd ..
+}
+
+function refMd() {
+    ref=$1
+    changeRoot
+    python3 -B -c "from utils.logxs import printf; printf(${ref}, _int=1, _md=1)"
+}
+
+function refMdSelf() {
+    ref="'No Reference : _by myself_'"
+    changeRoot
+    python3 -B -c "from utils.logxs import printf; printf(${ref}, _int=1, _md=1)"
+}
+
+function oneLineOutput() {
+    line=$1
+    echo -e "${OUTPUT}$line${RESET}"
+}
+
+function descriptionOutput() {
+    line=$1
+    echo -e "${WARN}Description : $line ${RESET}"
+}
+
+function warningOutput() {
+    line=$1
+    echo -e "${ERROR}Warning : $line ${RESET}"
+}
+
 function has_compose() {
     docker-compose >/dev/numm 2>&1
     return $?
@@ -17,23 +49,19 @@ function has_sudo() {
     return $?
 }
 
-function has_docker() {
+function doesHasDocker() {
     dpkg-query -l docker >/dev/null 2>&1
     return $?
 }
 
-function has_internet() {
+function doesHasInternet() {
     wget -q -T 1 --spider http://example.com
     return $?
 }
 
-function has_machine() {
+function doessHasMachine() {
     docker-machine >/dev/null 2>&1
     return $?
-}
-
-function error_no_internet() {
-    echo -e "${ERROR}'Internet Connection' is needed.${RESET}"
 }
 
 case "$1" in
@@ -93,7 +121,7 @@ case "$1" in
     docker stats $cid
     ;;
 
---dk-install-compose)
+--dk-i-compose)
     has_compose
     if [[ $? -eq 0 ]]; then
         echo -e "${WARN}${HEAD}'docker-compose' is already installed at : $(which docker-compose)${RESET}"
@@ -101,51 +129,49 @@ case "$1" in
         check your PATH. You can also create a symbolic link to '/usr/bin'"
         echo -e "${OUTPTU}For example 'sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose'${RESET}"
     else
-        has_internet
-        if [[ $? -eq 0 ]]; then
+        doesHasInternet
+        if [[ $? -ne 0 ]]; then
+            warningOutput "No Internet Connection."
+        else
             sudo curl -L "https://github.com/docker/compose/releases/download/1.28.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
             sudo chmod +x /usr/local/bin/docker-compose
             echo -e "${WARN}'docker-compose' is installed.${RESET}"
-        else
-            error_no_internet
         fi
     fi
     ;;
 
---dk-install-engine)
-    has_docker
+--dk-i-engine)
+    doesHasDocker
     if [[ $? -eq 0 ]]; then
-        echo -e "${WARN}${HEAD}'docker' is already installed."
+        warningOutput "'docker' is already installed."
     else
-        has_internet
-        if [[ $? -eq 0 ]]; then
+        doesHasInternet
+        if [[ $? -ne 0 ]]; then
+            warningOutput "No Internet Connection."
+        else
             sudo apt-get remove docker docker-engine docker.io containerd runc
             sudo apt-get update
             sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
-            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-            sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu$(lsb_release -cs)stable"
-            sudo apt-get update
-            sudo apt-get install docker-ce docker-ce-cli containerd.io
+            curl -fsSL https://get.docker.com -o get-docker.sh
+            sh get-docker.sh && rm ./get-docker.sh
             sudo usermod -aG docker $USER
-        else
-            error_no_internet
         fi
     fi
     ;;
 
---dk-install-machine)
-    has_machine
+--dk-i-machine)
+    doessHasMachine
     if [[ $? -eq 0 ]]; then
         echo -e "${WARN}${HEAD}docker-machine is already installed at : $(which docker-machine)"
     else
-        has_internet
+        doesHasInternet
         if [[ $? -eq 0 ]]; then
             base=https://github.com/docker/machine/releases/download/v0.16.0 &&
                 curl -L $base/docker-machine-$(uname -s)-$(uname -m) >/tmp/docker-machine &&
                 sudo mv /tmp/docker-machine /usr/local/bin/docker-machine &&
                 chmod +x /usr/local/bin/docker-machine
         else
-            error_no_internet
+            warningOutput "No Internet Connection."
         fi
     fi
     ;;
