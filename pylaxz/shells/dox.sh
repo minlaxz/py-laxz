@@ -54,6 +54,12 @@ case "$1" in
     refMd "'Referenced [Here](https://unix.stackexchange.com/a/38380/318519)'"
     ;;
 
+--do-qr)
+    descriptionOutput "Generate QR Code."
+    read -p "Any String: " usr_str
+    qr "${usr_str}"
+    ;;
+
 --do-mod-h265)
     descriptionOutput "Convert(Encode) H264 to H265. MANUAL"
     oneLineOutput "Resonable value for H265 is 24 ~ 30."
@@ -80,8 +86,8 @@ case "$1" in
 
 --do-wg)
     descriptionOutput "Generate wireguard VPN."
-    ./wgcf generate 
+    ./wgcf generate
     sudo wg-quick down ./cf-warp.conf && sudo wg-quick up ./cf-warp.conf
     descriptionOutput "Executed."
-;;
+    ;;
 esac

@@ -1,4 +1,4 @@
-#! /bin/env bash
+#!/bin/bash
 
 HEAD='\e[7;36m'
 RESET='\e[m'
@@ -6,6 +6,47 @@ OUTPUT='\e[32m'
 NL='\n'
 ERROR='\e[3;31m'
 WARN='\e[3;33m'
+
+function changeRoot() {
+    cd $(dirname "$0")
+    cd ..
+}
+
+function refMd() {
+    ref=$1
+    changeRoot
+    python3 -B -c "from utils.logxs import printf; printf(${ref}, _int=1, _md=1)"
+}
+
+function refMdSelf() {
+    ref="'No Reference : _by myself_'"
+    changeRoot
+    python3 -B -c "from utils.logxs import printf; printf(${ref}, _int=1, _md=1)"
+}
+
+function oneLineOutput() {
+    line=$1
+    echo -e "${OUTPUT}$line${RESET}"
+}
+
+function descriptionOutput() {
+    line=$1
+    echo -e "${WARN}Description : $line ${RESET}"
+}
+
+function warningOutput() {
+    line=$1
+    echo -e "${ERROR}Warning : $line ${RESET}"
+}
+
+function doesHasInternet() {
+    wget -q -T 1 --spider http://example.com
+    return $?
+}
+
+laxzcp() {
+    echo $1
+}
 
 case "$1" in
 --x-outline-api)
@@ -52,4 +93,9 @@ case "$1" in
         echo -e "${ERROR}Client ID can't be empty${RESET}"
     fi
     ;;
+
+--x-gen)
+    export -f laxzcp
+    ;;
+
 esac

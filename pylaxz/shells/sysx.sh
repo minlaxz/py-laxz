@@ -64,21 +64,26 @@ case "$1" in
         # Not Root
         doesHasSudo
         if [[ $? == 0 ]]; then
-            sudo apt update && sudo apt upgrade -y && sudo apt install xsel imwheel \
-                gvfs-fuse exfat-fuse cifs-utils net-tools \
-                build-essential cmake unzip zip pixz pkg-config \
-                git vscode gcc g++ python3-dev vim curl wget tar \
-                apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+                sudo apt-get update && sudo apt-get upgrade && sudo apt-get install xsel imwheel gvfs-fuse exfat-fuse cifs-utils net-tools \
+                build-essential cmake unzip zip pixz pkg-config git gcc \
+                g++ python3-dev vim curl wget tar apt-transport-https \
+                ca-certificates curl gnupg-agent software-properties-common
         else
             warningOutput "[Error] 'sudo' is needed."
         fi
     else
-        apt update && apt upgrade -y && apt install xsel imwheel \
+        apt-get update && apt-get upgrade -y && apt-get install xsel imwheel \
             gvfs-fuse exfat-fuse cifs-utils net-tools \
             build-essential cmake unzip zip pixz pkg-config \
-            git vscode gcc g++ python3-dev vim curl wget tar
+            git gcc g++ python3-dev vim curl wget tar
     fi
     descriptionOutput "Executed."
+    cat<<EOF
+            xsel imwheel
+            gvfs-fuse exfat-fuse cifs-utils net-tools 
+            build-essential cmake unzip zip pixz pkg-config 
+            git gcc g++ python3-dev vim curl wget tar
+EOF
     ;;
 
 --sys-which-bin)

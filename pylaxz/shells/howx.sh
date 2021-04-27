@@ -200,9 +200,11 @@ EOF
 
     ;;
 
---how-docker-github)
-    descriptionOutput "How to login to Github Packages."
+--how-pkg-github)
+    descriptionOutput "Docker and Github Packages."
     oneLineOutput "cat PAT | docker login https://docker.pkg.github.com -u minlaxz --password-stdin"
+    oneLineOutput "docker tag LOCAL_IMG:TAG docker.pkg.github.com/USERNAME/REPO/NAME:TAG"
+    oneLineOutput "docker push docker.pkg.github.com/USERNAME/REPO/NAME:TAG"
     refMd "'Referenced [Here](https://docs.github.com/en/packages/guides/configuring-docker-for-use-with-github-packages#authenticating-with-a-personal-access-token)'"
     ;;
 

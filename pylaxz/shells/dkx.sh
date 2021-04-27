@@ -39,8 +39,8 @@ function warningOutput() {
     echo -e "${ERROR}Warning : $line ${RESET}"
 }
 
-function has_compose() {
-    docker-compose >/dev/numm 2>&1
+function doesHasInternet() {
+    wget -q -T 1 --spider http://example.com
     return $?
 }
 
@@ -49,13 +49,13 @@ function has_sudo() {
     return $?
 }
 
-function doesHasDocker() {
-    dpkg-query -l docker >/dev/null 2>&1
+function has_compose() {
+    docker-compose >/dev/numm 2>&1
     return $?
 }
 
-function doesHasInternet() {
-    wget -q -T 1 --spider http://example.com
+function doesHasDocker() {
+    dpkg-query -l docker >/dev/null 2>&1
     return $?
 }
 
@@ -98,6 +98,18 @@ case "$1" in
     echo -e "${CMD}docker pull alpine:latest${RESET}"
     ;;
 
+--dk-ps-stopped)
+    echo -e "${OUTPUT}"
+    docker ps -f "status=exited"
+    echo -e "${RESET}"
+    ;;
+
+--dk-ps-stopped-id)
+    echo -e "${OUTPUT}"
+    docker ps -f "status=exited" --format "{{.ID}}"
+    echo -e "${RESET}"
+    ;;
+    
 --dk-port-bindings)
     if [[ ! $2 ]]; then
         bash $(dirname "$0")"/dkx.sh" --dk-ps-short
