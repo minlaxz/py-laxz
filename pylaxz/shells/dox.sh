@@ -56,8 +56,8 @@ case "$1" in
 
 --do-qr)
     descriptionOutput "Generate QR Code."
-    read -p "Any String: " usr_str
-    qr "${usr_str}"
+    read -p "Any String: " usrstr
+    qr "${usrstr}"
     ;;
 
 --do-mod-h265)
