@@ -226,4 +226,9 @@ EOF
     refMd "'Referenced [Here](https://www.arj.no/2018/05/18/trimvideo/)'"
     ;;
 
+--how-kernel-reboot)
+    descriptionOutput "This is used when linux freezes"
+    onelineOutput "While holding alt+sysReq (print) press R/E/I/S/U/B one by one."
+    refMd "'Referenced [Here](https://askubuntu.com/a/36717/944917)'"
+    ;;
 esac
