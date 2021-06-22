@@ -62,7 +62,7 @@ def main(direct=True):
 @main.command()
 @click.argument("arg", type=str, required=False)
 def version(**kw):
-    printf(f"{appVersion}", _int=1)
+    printf(f"pylaxz : {appVersion}\n", _int=1)
 
 
 @main.command()
