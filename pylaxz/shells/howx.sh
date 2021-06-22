@@ -231,4 +231,10 @@ EOF
     onelineOutput "While holding alt+sysReq (print) press R/E/I/S/U/B one by one."
     refMd "'Referenced [Here](https://askubuntu.com/a/36717/944917)'"
     ;;
+
+--how-install-nodejs)
+    descriptionOutput "How to install nodejs"
+    onelineOutput "sudo tar -C /usr/local --strip-components 1 -xzf ./node-v14.17.0-linux-x64.tar.xz"
+    refMdSelf
+    ;;
 esac
