@@ -65,7 +65,7 @@ function doessHasMachine() {
 }
 
 case "$1" in
---dk-basics)
+--dk-how)
     echo -e "${HEAD}build:${RESET}"
     echo -e "${CMD}docker build -f ./Dockerfile -t username/repo:tag .${RESET}${NL}"
 
@@ -98,39 +98,79 @@ case "$1" in
     echo -e "${CMD}docker pull alpine:latest${RESET}"
     ;;
 
+# stopped containers
 --dk-ps-stopped)
-    echo -e "${OUTPUT}"
-    docker ps -f "status=exited"
-    echo -e "${RESET}"
+    extra=$2
+    if [[ $extra == "id" ]]; then
+        echo -e "${OUTPUT}"
+        docker ps -f "status=exited" --format "{{.ID}}"
+        echo -e "${RESET}"
+    else
+        echo -e "${OUTPUT}"
+        docker ps -f "status=exited"
+        echo -e "${RESET}"
+    fi
     ;;
 
---dk-ps-stopped-id)
-    echo -e "${OUTPUT}"
-    docker ps -f "status=exited" --format "{{.ID}}"
-    echo -e "${RESET}"
-    ;;
-    
---dk-port-bindings)
+# container forwarding ports
+--dk-ports)
     if [[ ! $2 ]]; then
-        bash $(dirname "$0")"/dkx.sh" --dk-ps-short
-        read -p "Enter Container ID: " cid
+        bash $(dirname "$0")"/dkx.sh" --dk-ps-s
+        read -p "Enter Container ID or Name: " cid
     else
         cid=$2
     fi
     echo -e "${OUTPUT}"
-    docker inspect --format='{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}' $cid
-    # docker container port ID (also works)
+    # docker inspect --format='{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}' $cid
+    docker inspect --format="{{json .NetworkSettings.Ports}}" $cid | jq
     echo -e "${RESET}"
     ;;
 
 --dk-stats)
     if [[ ! $2 ]]; then
+        bash $(dirname "$0")"/dkx.sh" --dk-ps-s
+        read -p "Enter Container ID or Name: " cid
+    else
+        cid=$2
+    fi
+    docker stats $cid
+    ;;
+
+--dk-net-tips)
+    echo -e "https://stackoverflow.com/a/41294598/10582082"
+    echo -e "### Deprecated ... --link"
+    echo -e "docker run --rm -it --name alp_name ${HEAD}--link${RESET} busy_bee:bb alpine:latest"
+    echo -e "docker run --rm -it --name busy_bee ${HEAD}--link${RESET} alp_name:alp  busybox:latest"
+    echo -e "### ... ..."
+    echo -e "docker network connect multi-host-network container1"
+    echo -e "docker run -itd --network=multi-host-network busybox"
+    echo -e "docker network connect --ip 10.10.36.122 multi-host-network container2"
+    echo -e "docker network connect --link container1:c1 multi-host-network container2"
+    ;;
+
+--dk-ps-all)
+    echo -e "${OUTPUT}"
+    docker ps -a --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}\t{{.Image}}\t{{.Command}}"
+    echo -e "${RESET}"
+    ;;
+
+--dk-ps-s)
+    echo -e "${OUTPUT}"
+    docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Image}}"
+    echo -e "${RESET}"
+    ;;
+
+--dk-ip)
+    if [[ ! $2 ]]; then
         bash $(dirname "$0")"/dkx.sh" --dk-ps-short
         read -p "Enter Container ID: " cid
     else
         cid=$2
     fi
-    docker stats $cid
+    echo -e "${OUTPUT}"
+    # docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Ports}}"
+    echo -e "IP: " $(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $cid)
+    echo -e "${RESET}"
     ;;
 
 --dk-i-compose)
@@ -188,43 +228,6 @@ case "$1" in
     fi
     ;;
 
---dk-net-tips)
-    echo -e "https://stackoverflow.com/a/41294598/10582082"
-    echo -e "### Deprecated ... --link"
-    echo -e "docker run --rm -it --name alp_name ${HEAD}--link${RESET} busy_bee:bb alpine:latest"
-    echo -e "docker run --rm -it --name busy_bee ${HEAD}--link${RESET} alp_name:alp  busybox:latest"
-    echo -e "### ... ..."
-    echo -e "docker network connect multi-host-network container1"
-    echo -e "docker run -itd --network=multi-host-network busybox"
-    echo -e "docker network connect --ip 10.10.36.122 multi-host-network container2"
-    echo -e "docker network connect --link container1:c1 multi-host-network container2"
-
-    ;;
-
---dk-ps)
-    echo -e "${OUTPUT}"
-    docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}\t{{.Image}}\t{{.Command}}"
-    echo -e "${RESET}"
-    ;;
-
---dk-ps-short)
-    echo -e "${OUTPUT}"
-    docker ps -a --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Image}}"
-    echo -e "${RESET}"
-    ;;
-
---dk-ip)
-    if [[ ! $2 ]]; then
-        bash $(dirname "$0")"/dkx.sh" --dk-ps-short
-        read -p "Enter Container ID: " cid
-    else
-        cid=$2
-    fi
-    echo -e "${OUTPUT}"
-    # docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Ports}}"
-    echo -e "IP: " $(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $cid)
-    echo -e "${RESET}"
-    ;;
 
 *)
     echo -e "${HEAD}${ERROR}>>>dkx.sh: Internal Error $?<<<${RESET}"
